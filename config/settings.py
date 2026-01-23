@@ -5,12 +5,12 @@ WIDTH, HEIGHT = 540, 960  # 9:16 aspect ratio
 WORLD_HEIGHT = 42000 # Total height of the game world
 FPS = 60  # Frames per second
 GRAVITY = (0, 1300)  # Gravity vector
-BALL_SIZE = 10  # Default ball size
+BALL_SIZE = 20  # Default ball size
 BALL_MASS = 1  # Default ball mass
 BALL_FRICTION = 0.6  # Friction coefficient for balls
 
-SCREEN_WIDTH = WIDTH + 50  # Additional space for UI
-SCREEN_HEIGHT = HEIGHT + 50  # Additional space for UI
+SCREEN_WIDTH = WIDTH + 10  # Additional space for UI
+SCREEN_HEIGHT = HEIGHT + 10  # Additional space for UI
 
 OUTPUT_FRAMES_FOLDER = "output_frames"  # Folder for output frames
 OUTPUT_FOLDER = "output"  # General output folder
@@ -24,45 +24,56 @@ os.makedirs(SOUNDS_FOLDER, exist_ok=True)
 os.makedirs(PHOTOS_FOLDER, exist_ok=True)
 
 # Color definitions
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-YELLOW = (255, 255, 0)
-GRAY = (128, 128, 128)
-LIGHT_GRAY = (200, 200, 200)
-DARK_GRAY = (50, 50, 50)
-TRANSPARENT = (0, 0, 0, 0)
-ORANGE = (255, 165, 0)
-PURPLE = (128, 0, 128)
-PINK = (255, 192, 203)
-BROWN = (165, 42, 42)
-CYAN = (0, 255, 255)
-MAGENTA = (255, 0, 255)
-LIGHT_BLUE = (173, 216, 230)
-DARK_GREEN = (0, 100, 0)
-GOLD = (255, 215, 0)
-SILVER = (192, 192, 192)
-BRONZE = (205, 127, 50)
-COLORS = [WHITE, BLACK, RED, GREEN, BLUE, YELLOW, GRAY, LIGHT_GRAY, DARK_GRAY, LIGHT_BLUE, DARK_GREEN, GOLD, SILVER, BRONZE, ORANGE, PURPLE, PINK, BROWN, CYAN, MAGENTA]
+NEON_WHITE      = (245, 245, 245)
+NEON_BLACK      = (15, 15, 20)
+
+NEON_RED        = (255, 60, 90)
+NEON_GREEN      = (60, 255, 160)
+NEON_BLUE       = (80, 170, 255)
+NEON_YELLOW     = (255, 240, 80)
+NEON_ORANGE     = (255, 140, 60)
+NEON_PURPLE     = (190, 90, 255)
+NEON_PINK       = (255, 110, 190)
+NEON_CYAN       = (60, 255, 255)
+
+NEON_LIME       = (170, 255, 60)
+NEON_TEAL       = (60, 255, 210)
+NEON_MAGENTA    = (255, 60, 255)
+
+NEON_GRAY       = (140, 140, 160)
+NEON_DARK_GRAY  = (35, 35, 50)
+
+NEON_GOLD       = (255, 215, 90)
+NEON_SILVER     = (210, 210, 230)
+NEON_BRONZE     = (210, 140, 80)
+
+COLORS = [
+    NEON_RED, NEON_GREEN, NEON_BLUE, NEON_YELLOW,
+    NEON_ORANGE, NEON_PURPLE, NEON_PINK, NEON_CYAN,
+    NEON_LIME, NEON_TEAL, NEON_MAGENTA,
+    NEON_GOLD, NEON_SILVER, NEON_BRONZE
+]
+
+BACKGROUND_COLOR = (22, 22, 30)   # Koyu neon arka plan
+DEFAULT_OBSTACLE_COLOR = NEON_DARK_GRAY
+BALL_COLOR = NEON_WHITE
 
 # Obstacle settings
 OBSTACKLE_COLORS = {
-    "wall": DARK_GRAY, # Duvar
-    "platform": BROWN, # Platform (denge yüzeyi)
-    "ramp": LIGHT_GRAY, # Rampa (eğimli yüzey)
-    "plinko": BLUE, # Plinko (çivili engel)
-    "pinball": RED, # Pinball (topun zıpladığı engel)
-    "forest": GREEN, # Orman (ağaç engeli)
-    "spinner": ORANGE, # Dönen engel (dönen disk)
-    "hammer": PURPLE, # Çekiç (sallanarak engel oluşturan)
-    "windmill": CYAN, # Yel değirmeni (dönen kanatlar)
-    "slider": YELLOW, # Kaydırıcı (yatay hareket eden engel)
-    "crusher": BLACK, # Ezici (dikey hareket eden engel)
-    "gravity": MAGENTA, # Yerçekimi değiştirici (yerçekimini değiştiren engel)
-    "sieve": GRAY, # Elek (topun içinden geçebileceği engel)
+    "wall": NEON_DARK_GRAY,        # Duvar (geri planda kalır)
+    "platform": NEON_ORANGE,       # Ana denge yüzeyi
+    "lucky_cup": NEON_GRAY,        # Şans kupası
+    "plinko": NEON_BLUE,           # Çivi alanı
+    "minefield": NEON_RED,           # Mayın tarlası
+    "seesaw": NEON_GREEN,          # Tahterevalli
+    "bouncer": NEON_PURPLE,        # Trambolin
+    "funnel": NEON_PINK,           # Huni
+    "windmill": NEON_CYAN,         # Yel değirmeni
+    "slider": NEON_YELLOW,         # Yatay kayıcı
+    "hammer": NEON_RED,            # Çekiç
+    "windmill": NEON_TEAL,         # Yel değirmeni
 }
+
 
 # Camera settings
 CAMERA_SMOOTH = 0.1  # Camera smoothing factor
@@ -71,3 +82,13 @@ CAMERA_OFFSET_Y = 200  # Camera offset from the player (tr: Oyuncudan kamera ofs
 TRAIL_LENGTH = 30  # Length of the player's trail (tr: Oyuncu izinin uzunluğu)
 
 
+# OBSTACLE PHYSICS SETTINGS
+OBSTACLE_DENSITY = 0.6  # Density of obstacles (tr: Engellerin yoğunluğu) 
+OBSTACLE_FRICTION = 1.0  # Friction coefficient for obstacles (tr: Engellerin sürtünme katsayısı)
+ELASTICITY = 0.6  # Elasticity for obstacle collisions (tr: Engellerin çarpışma esnekliği)
+DEFAULT_OBSTACLE_MASS = 10  # Default mass for dynamic obstacles (tr: Dinamik engeller için varsayılan kütle)
+OBSTACLE_RADIUS = 15  # Default radius for circular obstacles (tr: Dairesel engeller için varsayılan yarıçap)
+MAX_OBSTACLE_HEIGHT = 3000  # Maximum height for obstacles (tr: Engeller için maksimum yükseklik)
+
+PLINKO_SPACING_X = 95  # Horizontal spacing between plinko pegs (tr: Plinko çivileri arasındaki yatay boşluk)
+PLINKO_SPACING_Y = 100  # Vertical spacing between plinko rows (tr

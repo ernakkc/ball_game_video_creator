@@ -48,7 +48,7 @@ class Game:
 
             self.world.space.step(dt)
 
-            leader_y = min(ball.body.position.y for ball in self.balls)
+            leader_y = max(ball.body.position.y for ball in self.balls)
             self.camera.update(leader_y)
 
             self.screen.fill((240, 240, 240))

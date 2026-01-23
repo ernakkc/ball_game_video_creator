@@ -1,6 +1,6 @@
 import pymunk
 from entities.base_entity import BaseEntity
-from config.settings import BALL_SIZE, BALL_MASS, BALL_FRICTION
+from config.settings import BALL_SIZE, BALL_MASS, BALL_FRICTION, BALL_COLOR, ELASTICITY
 
 class Ball(BaseEntity):
     def __init__(self, space, x, y):
@@ -8,7 +8,7 @@ class Ball(BaseEntity):
         self.body = pymunk.Body(BALL_MASS, pymunk.moment_for_circle(BALL_MASS, 0, BALL_SIZE)) 
         self.body.position = x, y
         
-        self.color = (255, 255, 255)  # Default Beyaz renk
+        self.color = BALL_COLOR  # Default Beyaz renk
         self.name = "unnamed_ball" # Varsayılan isim
         self.photo = None  # Fotoğraf için yer tutucu
         self.sound = None  # Ses için yer tutucu
@@ -17,6 +17,8 @@ class Ball(BaseEntity):
 
         self.shape = pymunk.Circle(self.body, self.size) 
         self.shape.friction = BALL_FRICTION
+        self.shape.color = BALL_COLOR
+        self.shape.elasticity = ELASTICITY
 
         space.add(self.body, self.shape)
     
