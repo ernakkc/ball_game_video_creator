@@ -18,6 +18,10 @@ class Hammer(BaseObstacle):
                  swing_angle=60, swing_speed=2, color=DEFAULT_OBSTACLE_COLOR):
         super().__init__(space)
         
+        # Set attributes first (needed for get_height even if we return early)
+        self.arm_length = arm_length
+        self.hammer_size = hammer_size
+        
         if y > MAX_OBSTACLE_HEIGHT:
             return
         
@@ -73,3 +77,6 @@ class Hammer(BaseObstacle):
         self.body.angular_velocity = swing_speed
         
         self.shapes = [arm, hammer_head]
+    
+    def get_height(self):
+        return self.arm_length + self.hammer_size * 2 + 100

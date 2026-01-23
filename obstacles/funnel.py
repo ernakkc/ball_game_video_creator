@@ -54,3 +54,6 @@ class Funnel(BaseObstacle):
         self.shape4.elasticity = ELASTICITY
         self.shape4.color = to_rgba_float(OBSTACKLE_COLORS.get('funnel'))
         space.add(self.body4, self.shape4)
+    
+    def get_height(self):
+        return 600  # Total funnel height

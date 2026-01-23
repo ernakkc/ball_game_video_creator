@@ -66,3 +66,6 @@ class LuckyCup(BaseObstacle):
                     self.segments.append(seg)
 
                 space.add(self.body, *self.segments)
+    
+    def get_height(self):
+        return 5 * 150 + 200  # 5 rows of cups plus spacing

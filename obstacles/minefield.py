@@ -30,4 +30,7 @@ class Minefield(BaseObstacle):
                 self.shape.elasticity = ELASTICITY
                 self.shape.color = to_rgba_float(OBSTACKLE_COLORS.get('minefield'))
                 space.add(self.body, self.shape)
+    
+    def get_height(self):
+        return 8 * 120 + 100  # 8 rows of mines plus spacing
 

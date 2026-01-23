@@ -14,6 +14,7 @@ class Ball(BaseEntity):
         self.sound = None  # Ses için yer tutucu
         self.body.mass = BALL_MASS
         self.size = BALL_SIZE
+        self.trail = []  # İz listesi (trajectory)
 
         self.shape = pymunk.Circle(self.body, self.size) 
         self.shape.friction = BALL_FRICTION
@@ -21,5 +22,33 @@ class Ball(BaseEntity):
         self.shape.elasticity = ELASTICITY
 
         space.add(self.body, self.shape)
+    
+    def clamp_position(self, min_x, max_x, min_y, max_y):
+        """Topun pozisyonunu sınırlar içinde tutar"""
+        x, y = self.body.position
+        clamped = False
+        
+        # X sınırları
+        if x < min_x:
+            x = min_x
+            self.body.velocity = (abs(self.body.velocity.x) * 0.5, self.body.velocity.y)
+            clamped = True
+        elif x > max_x:
+            x = max_x
+            self.body.velocity = (-abs(self.body.velocity.x) * 0.5, self.body.velocity.y)
+            clamped = True
+        
+        # Y sınırları
+        if y < min_y:
+            y = min_y
+            self.body.velocity = (self.body.velocity.x, abs(self.body.velocity.y) * 0.5)
+            clamped = True
+        elif y > max_y:
+            y = max_y
+            self.body.velocity = (self.body.velocity.x, -abs(self.body.velocity.y) * 0.5)
+            clamped = True
+        
+        if clamped:
+            self.body.position = x, y
     
         

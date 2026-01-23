@@ -82,3 +82,6 @@ class Conveyor(BaseObstacle):
                 a.color = arrow_color
                 self.arrows.append(a)
                 space.add(a)
+    
+    def get_height(self):
+        return 200  # Conveyor height plus spacing

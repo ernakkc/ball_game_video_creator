@@ -6,6 +6,7 @@ from utils.color_utils import to_rgba_float
 class Plinko(BaseObstacle):
     def __init__(self, space, x, y, x_count, y_count, angle=0, color=DEFAULT_OBSTACLE_COLOR):
         super().__init__(space)
+        self.y_count = y_count
         for i in range(x_count):
             for j in range(y_count):
                 peg_x = x + i * PLINKO_SPACING_X + (j % 2) * (PLINKO_SPACING_X / 2)
@@ -28,3 +29,6 @@ class Plinko(BaseObstacle):
                 self.shape.color = to_rgba_float(resolved)
                 
                 space.add(self.body, self.shape)
+    
+    def get_height(self):
+        return self.y_count * PLINKO_SPACING_Y + 150

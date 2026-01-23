@@ -17,11 +17,15 @@ import random
 
 class LevelRandom(BaseLevel):
     def wall_obstacles(self):
-        w = 10
+        w = 20  # Duvar kalınlığı
         h = WORLD_HEIGHT
+        # Sol duvar
         self.obstacles.append(Platform(self.space, w//2, h//2, w, h, color='wall'))
+        # Sağ duvar
         self.obstacles.append(Platform(self.space, SCREEN_WIDTH - w//2, h//2, w, h, color='wall'))
-        self.obstacles.append(Platform(self.space, SCREEN_WIDTH//2, 5, SCREEN_WIDTH, 10, color='wall'))
+        # Üst duvar
+        self.obstacles.append(Platform(self.space, SCREEN_WIDTH//2, 5, SCREEN_WIDTH, 20, color='wall'))
+        # Alt duvar
         self.obstacles.append(Platform(self.space, SCREEN_WIDTH//2, WORLD_HEIGHT - 30, SCREEN_WIDTH, 60, color='wall'))
 
     def build(self):
@@ -44,27 +48,29 @@ class LevelRandom(BaseLevel):
             random.shuffle(OBSTACLES)
 
             for obstacle_name in OBSTACLES:
+                obstacle = None
                 if obstacle_name == 'plinko':
-                    self.obstacles.append(Plinko(self.space, 0, y, 20, 9, color='plinko'))
+                    obstacle = Plinko(self.space, 0, y, 20, 9, color='plinko')
                 elif obstacle_name == 'lucky_cup':
-                    self.obstacles.append(LuckyCup(self.space, 0, y))
+                    obstacle = LuckyCup(self.space, 0, y)
                 elif obstacle_name == 'minefield':
-                    self.obstacles.append(Minefield(self.space, 0, y))
+                    obstacle = Minefield(self.space, 0, y)
                 elif obstacle_name == 'seesaw':
-                    self.obstacles.append(Seesaw(self.space, 0, y, w=400, h=20, angle=0, color='seesaw'))
+                    obstacle = Seesaw(self.space, 0, y, w=400, h=20, angle=0, color='seesaw')
                 elif obstacle_name == 'bouncer':
-                    self.obstacles.append(Bouncer(self.space, 70, y, radius=50, color='bouncer'))
+                    obstacle = Bouncer(self.space, 70, y, radius=50, color='bouncer')
                 elif obstacle_name == 'funnel':
-                    self.obstacles.append(Funnel(self.space, y))
+                    obstacle = Funnel(self.space, y)
                 elif obstacle_name == 'conveyor':
-                    self.obstacles.append(Conveyor(self.space, 150, y))
+                    obstacle = Conveyor(self.space, 150, y)
                 elif obstacle_name == 'windmill':
-                    self.obstacles.append(Windmill(self.space, 200, y))
+                    obstacle = Windmill(self.space, 200, y)
                 elif obstacle_name == 'hammer':
-                    self.obstacles.append(Hammer(self.space, 300, y))
+                    obstacle = Hammer(self.space, 300, y)
                 
-                print(obstacle_name, "added at y =", y)
-                y += 1000
+                if obstacle:
+                    self.obstacles.append(obstacle)
+                    y += obstacle.get_height()  # Dinamik yükseklik
 
 
 

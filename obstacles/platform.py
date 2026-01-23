@@ -20,3 +20,8 @@ class Platform(BaseObstacle):
         self.shape.color = to_rgba_float(resolved)
         
         space.add(self.body, self.shape)
+        
+        self.height = h
+    
+    def get_height(self):
+        return self.height + 100

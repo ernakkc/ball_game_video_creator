@@ -73,3 +73,5 @@ class Windmill(BaseObstacle):
             self.blades.append(blade)
             space.add(blade)
         
+    def get_height(self):
+        return 250  # Windmill diameter plus spacing

@@ -9,10 +9,10 @@ class Seesaw(BaseObstacle):
 
         # 4 tane seesaw oluştur: sol ve sağ yarıda çapraz konumda
         positions = [
-            (170, y + 200),   # Sol üst
-            (370, y + 400),   # Sağ orta
-            (170, y + 600),   # Sol alt
-            (370, y + 800),   # Sağ alt
+            (190, y + 200),   # Sol üst
+            (360, y + 400),   # Sağ orta
+            (190, y + 600),   # Sol alt
+            (360, y + 800),   # Sağ alt
         ]
 
         self.bodies = []
@@ -53,3 +53,6 @@ class Seesaw(BaseObstacle):
 
         # Ana body olarak ilkini ata (BaseObstacle için)
         self.body = self.bodies[0] if self.bodies else None
+    
+    def get_height(self):
+        return 1000  # 4 seesaw ile toplam yükseklik

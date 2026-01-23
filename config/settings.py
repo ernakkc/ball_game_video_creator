@@ -9,6 +9,8 @@ BALL_SIZE = 20  # Default ball size
 BALL_MASS = 1  # Default ball mass
 BALL_FRICTION = 0.6  # Friction coefficient for balls
 
+GATE_TIME = 2.0  # Time a gate remains open (in frames)
+
 SCREEN_WIDTH = WIDTH + 10  # Additional space for UI
 SCREEN_HEIGHT = HEIGHT + 10  # Additional space for UI
 
@@ -72,6 +74,7 @@ OBSTACKLE_COLORS = {
     "slider": NEON_YELLOW,         # Yatay kayıcı
     "hammer": NEON_RED,            # Çekiç
     "windmill": NEON_TEAL,         # Yel değirmeni
+    "gravity_well": NEON_PURPLE,   # Yerçekimi kuyusu
 }
 
 
@@ -79,7 +82,7 @@ OBSTACKLE_COLORS = {
 CAMERA_SMOOTH = 0.1  # Camera smoothing factor
 CAMERA_START_Y = 100  # Initial camera Y position (tr: Başlangıç kamera Y konumu)
 CAMERA_OFFSET_Y = 200  # Camera offset from the player (tr: Oyuncudan kamera ofseti. Oyuncunun biraz üstünde konumlandırmak için kullanılır.)
-TRAIL_LENGTH = 30  # Length of the player's trail (tr: Oyuncu izinin uzunluğu)
+TRAIL_LENGTH = 10  # Length of the player's trail (performans için azaltıldı)
 
 
 # OBSTACLE PHYSICS SETTINGS

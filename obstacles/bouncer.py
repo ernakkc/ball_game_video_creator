@@ -55,3 +55,8 @@ class Bouncer(BaseObstacle):
         
         # Ana body reference
         self.body = self.bodies[0] if self.bodies else None
+        self.y_count = y_count
+        self.spacing = spacing
+    
+    def get_height(self):
+        return self.y_count * self.spacing + 150
