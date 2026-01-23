@@ -9,6 +9,7 @@ BALL_SIZE = 20  # Default ball size
 BALL_MASS = 1  # Default ball mass
 BALL_FRICTION = 0.6  # Friction coefficient for balls
 MAX_BALL_SPEED = 2000  # Maximum ball speed to prevent tunneling
+MAX_PARTICLES = 200  # Maximum number of particles on screen
 
 GATE_TIME = 2.0  # Time a gate remains open (in frames)
 

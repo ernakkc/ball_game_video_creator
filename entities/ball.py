@@ -20,6 +20,7 @@ class Ball(BaseEntity):
         self.shape.friction = BALL_FRICTION
         self.shape.color = BALL_COLOR
         self.shape.elasticity = ELASTICITY
+        self.shape.collision_type = 1
 
         space.add(self.body, self.shape)
     

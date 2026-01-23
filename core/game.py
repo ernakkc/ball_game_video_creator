@@ -4,7 +4,7 @@ import math
 import re
 from random import randint, choice
 
-from config.settings import SCREEN_HEIGHT, SCREEN_WIDTH, FPS, WORLD_HEIGHT, GATE_TIME, OUTPUT_FRAMES_FOLDER, BACKGROUNDS
+from config.settings import SCREEN_HEIGHT, SCREEN_WIDTH, FPS, WORLD_HEIGHT, GATE_TIME, OUTPUT_FRAMES_FOLDER, BACKGROUNDS, MAX_PARTICLES
 from config import settings
 from config.user_settings import NAMES, PHOTOS, NUM_MARBLES, PHOTOS, COLORS, SOUNDS
 
@@ -43,6 +43,11 @@ class Game:
         
         
         self.world = World(screen=self.screen)
+        self.particles = []
+        
+        # Çarpışma efekti için handler - sadece top-engeller arası
+        self.world.space.on_collision(1, 0, post_solve=self.on_ball_obstacle_collision)
+        
         self.camera = Camera(SCREEN_HEIGHT)
         self.renderer = Renderer(self.screen, self.camera, color1, color2)
         self.events = EventManager()
@@ -180,6 +185,9 @@ class Game:
                     # Top hızlarını sınırla
                     for ball in self.balls:
                         ball.update(dt)
+                    
+                    # Particle'ları güncelle
+                    self.particles = [p for p in self.particles if p.update(dt)]
                     
                     self.elapsed_time += dt
                     self.level_start_time += dt
@@ -395,3 +403,40 @@ class Game:
             'comments': self.comments,
             'elapsed_time': self.elapsed_time
         }
+    
+    def on_ball_obstacle_collision(self, arbiter, space, data):
+        """Top engel çarpışmasında particle efekti"""
+        from entities.particle import Particle
+        import random
+        
+        # Sadece güçlü çarpışmalarda particle çıkar
+        if arbiter.total_impulse.length < 10:  # Eşik değeri
+            return True
+        
+        # Maksimum particle sayısını aşma
+        if len(self.particles) >= MAX_PARTICLES:
+            return True
+        
+        # Çarpışma noktası
+        contact_point = arbiter.contact_point_set.points[0].point_a
+        
+        # 3-6 particle oluştur
+        num_particles = random.randint(3, 6)
+        for i in range(num_particles):
+            angle = random.uniform(0, 2 * 3.14159)
+            speed = random.uniform(200, 400)
+            vx = speed * random.choice([-1, 1]) * random.uniform(0.5, 1.5)
+            vy = speed * random.uniform(-1, 1)
+            
+            particle = Particle(
+                space, 
+                contact_point.x, 
+                contact_point.y, 
+                vx, 
+                vy, 
+                lifetime=random.randint(20, 40),
+                color=(255, 255, 255)
+            )
+            self.particles.append(particle)
+        
+        return True
