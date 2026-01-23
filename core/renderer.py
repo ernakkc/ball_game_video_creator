@@ -1,18 +1,45 @@
 import pygame
 import pymunk
 import pymunk.pygame_util
-from config.settings import BACKGROUND_COLOR, DEFAULT_OBSTACLE_COLOR, TRAIL_LENGTH, SCREEN_HEIGHT
+from random import randint, uniform
+from config.settings import DEFAULT_OBSTACLE_COLOR, TRAIL_LENGTH, SCREEN_HEIGHT, SCREEN_WIDTH
 from utils.vec2px import vec2px
 
 
+def create_gradient_surface(width, height, color1, color2):
+    surface = pygame.Surface((width, height))
+    for y in range(height):
+        ratio = y / height
+        r = color1[0] * (1 - ratio) + color2[0] * ratio
+        g = color1[1] * (1 - ratio) + color2[1] * ratio
+        b = color1[2] * (1 - ratio) + color2[2] * ratio
+        pygame.draw.line(surface, (int(r), int(g), int(b)), (0, y), (width-1, y))
+    return surface
+
+
 class Renderer:
-    def __init__(self, screen, camera):
+    def __init__(self, screen, camera, color1, color2):
         self.screen = screen
         self.draw_options = pymunk.pygame_util.DrawOptions(screen)
         self.camera = camera
+        self.gradient_surf = create_gradient_surface(SCREEN_WIDTH, SCREEN_HEIGHT, color1, color2)
+        
+        # Yıldızları başlat
+        self.stars = []
+        for i in range(150):
+            self.stars.append({
+                'x': randint(0, SCREEN_WIDTH),
+                'y': randint(0, SCREEN_HEIGHT),
+                'size': uniform(0, 2),
+                'speed': uniform(0.2, 1.0)
+            })
 
     def draw(self, space):
-        self.screen.fill(BACKGROUND_COLOR)
+        self.screen.blit(self.gradient_surf, (0, 0))
+        
+        # Yıldızları çiz
+        for star in self.stars:
+            pygame.draw.circle(self.screen, (255, 255, 255), (int(star['x']), int(star['y'])), max(1, int(star['size'])))
 
         for shape in space.shapes:
             color = getattr(shape, "color", DEFAULT_OBSTACLE_COLOR)
@@ -119,3 +146,10 @@ class Renderer:
                     )
 
 
+
+    def update_stars(self):
+        for star in self.stars:
+            star['y'] += star['speed']
+            if star['y'] > SCREEN_HEIGHT:
+                star['y'] = 0
+                star['x'] = randint(0, SCREEN_WIDTH)

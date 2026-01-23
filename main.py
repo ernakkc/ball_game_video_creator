@@ -6,7 +6,7 @@ from moviepy.editor import ImageSequenceClip, AudioFileClip, CompositeAudioClip
 from config.settings import FPS, OUTPUT_FRAMES_FOLDER, OUTPUT_FOLDER
 
 game = Game()
-game.record_video = True  # Video oluşturmak için True
+game.record_video = True  
 game.load_level(LevelRandom)
 results = game.run()
 
@@ -87,4 +87,4 @@ else:
 print("\n🎥 Video dosyası oluşturuluyor...")
 clip.write_videofile(f"{OUTPUT_FOLDER}/advanced_marble_race-{datetime.now().timestamp()}.mp4", codec="libx264", fps=FPS, audio=True, audio_codec='aac', preset='ultrafast', threads=8, verbose=False)  # Çok hızlı ayarlar
 
-print("✅ Video hazır: advanced_marble_race.mp4")  # Başarı mesajı
+print(f"✅ Video hazır: {OUTPUT_FOLDER}/advanced_marble_race.mp4")  # Başarı mesajı

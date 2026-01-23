@@ -1,6 +1,7 @@
 import pygame
 import pymunk
 import math
+import re
 from random import randint, choice
 
 from config.settings import SCREEN_HEIGHT, SCREEN_WIDTH, FPS, WORLD_HEIGHT, GATE_TIME, OUTPUT_FRAMES_FOLDER, BACKGROUNDS
@@ -24,13 +25,26 @@ class Game:
         selected_bg = choice(list(BACKGROUNDS.values()))
         settings.BACKGROUND_COLOR = selected_bg["canvas"]
         
+        # Gradient renkleri çıkar
+        match = re.search(r'linear-gradient\(.*?, (#\w+) \d+%, (#\w+) \d+%\)', selected_bg["body"])
+        if match:
+            color1_hex = match.group(1)
+            color2_hex = match.group(2)
+            def hex_to_rgb(hex_str):
+                return tuple(int(hex_str[i:i+2], 16) for i in (1, 3, 5))
+            color1 = hex_to_rgb(color1_hex)
+            color2 = hex_to_rgb(color2_hex)
+        else:
+            color1 = selected_bg["canvas"]
+            color2 = selected_bg["canvas"]
+        
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         
         
         self.world = World(screen=self.screen)
         self.camera = Camera(SCREEN_HEIGHT)
-        self.renderer = Renderer(self.screen, self.camera)
+        self.renderer = Renderer(self.screen, self.camera, color1, color2)
         self.events = EventManager()
         self.screen_text = ScreenText()
 
@@ -303,6 +317,9 @@ class Game:
             
             # Topları izleriyle çiz
             self.renderer.draw_balls(self.balls)
+            
+            # Yıldızları güncelle
+            self.renderer.update_stars()
             
             # Ekran yazılarını çiz
             fps = self.clock.get_fps()
