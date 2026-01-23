@@ -31,9 +31,6 @@ class LuckyCup(BaseObstacle):
                 if y_count % 2 == 0:
                     peg_x -= 80
 
-
-                print(peg_x, peg_y)
-
                 if peg_x < 0 or peg_x > 2000 or peg_y > MAX_OBSTACLE_HEIGHT:
                     continue  # Skip pegs outside the desired range
                 

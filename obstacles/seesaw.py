@@ -9,10 +9,10 @@ class Seesaw(BaseObstacle):
 
         # 4 tane seesaw oluştur: sol ve sağ yarıda çapraz konumda
         positions = [
-            (170, 200),   # Sol üst
-            (370, 400),   # Sağ orta
-            (170, 600),   # Sol alt
-            (370, 800),   # Sağ alt
+            (170, y + 200),   # Sol üst
+            (370, y + 400),   # Sağ orta
+            (170, y + 600),   # Sol alt
+            (370, y + 800),   # Sağ alt
         ]
 
         self.bodies = []
