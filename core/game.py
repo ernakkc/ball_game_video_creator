@@ -1,9 +1,10 @@
 import pygame
 import pymunk
 import math
-from random import randint
+from random import randint, choice
 
-from config.settings import SCREEN_HEIGHT, SCREEN_WIDTH, FPS, WORLD_HEIGHT, GATE_TIME, OUTPUT_FRAMES_FOLDER
+from config.settings import SCREEN_HEIGHT, SCREEN_WIDTH, FPS, WORLD_HEIGHT, GATE_TIME, OUTPUT_FRAMES_FOLDER, BACKGROUNDS
+from config import settings
 from config.user_settings import NAMES, PHOTOS, NUM_MARBLES, PHOTOS, COLORS, SOUNDS
 
 from core.world import World
@@ -18,6 +19,11 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
+        
+        # Random background seç
+        selected_bg = choice(list(BACKGROUNDS.values()))
+        settings.BACKGROUND_COLOR = selected_bg["canvas"]
+        
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         

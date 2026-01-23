@@ -58,6 +58,20 @@ COLORS = [
 
 BACKGROUND_COLOR = (22, 22, 30)   # Koyu neon arka plan
 DEFAULT_OBSTACLE_COLOR = NEON_DARK_GRAY
+
+# Background options for random selection
+BACKGROUNDS = {
+    "dark": {"name": "Uzay", "canvas": (15, 15, 30), "body": "linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%)"},
+    "sunset": {"name": "Gün Batımı", "canvas": (26, 5, 5), "body": "linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%)"},
+    "ocean": {"name": "Okyanus", "canvas": (0, 16, 32), "body": "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)"},
+    "forest": {"name": "Orman", "canvas": (5, 21, 5), "body": "linear-gradient(135deg, #134e5e 0%, #71b280 100%)"},
+    "neon": {"name": "Neon", "canvas": (16, 0, 21), "body": "linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)"},
+    "volcano": {"name": "Volkan", "canvas": (42, 5, 5), "body": "linear-gradient(135deg, #800000 0%, #ff4500 100%)"},
+    "ice": {"name": "Buzul", "canvas": (5, 21, 37), "body": "linear-gradient(135deg, #e0f7fa 0%, #00bcd4 100%)"},
+    "midnight": {"name": "Gece Yarısı", "canvas": (0, 0, 0), "body": "linear-gradient(135deg, #000000 0%, #434343 100%)"},
+    "candy": {"name": "Şeker", "canvas": (42, 10, 26), "body": "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)"},
+    "gold": {"name": "Altın", "canvas": (26, 21, 5), "body": "linear-gradient(135deg, #cac531 0%, #f3f9a7 100%)"}
+}
 BALL_COLOR = NEON_WHITE
 
 # Obstacle settings
