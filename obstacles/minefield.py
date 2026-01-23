@@ -1,7 +1,7 @@
 import pymunk
 from random import randint, choice
 from obstacles.base_obstacle import BaseObstacle
-from config.settings import OBSTACKLE_COLORS, DEFAULT_OBSTACLE_COLOR, ELASTICITY, OBSTACLE_FRICTION, OBSTACLE_DENSITY, OBSTACLE_RADIUS, DEFAULT_OBSTACLE_MASS, PLINKO_SPACING_X, PLINKO_SPACING_Y, MAX_OBSTACLE_HEIGHT
+from config.settings import OBSTACLE_COLORS, OBSTACLE_COLORS_EDGE, DEFAULT_OBSTACLE_COLOR, ELASTICITY, OBSTACLE_FRICTION, OBSTACLE_DENSITY, OBSTACLE_RADIUS, DEFAULT_OBSTACLE_MASS, PLINKO_SPACING_X, PLINKO_SPACING_Y, MAX_OBSTACLE_HEIGHT
 from utils.color_utils import to_rgba_float
 
 class Minefield(BaseObstacle):
@@ -28,7 +28,8 @@ class Minefield(BaseObstacle):
                 self.shape = pymunk.Poly(self.body, verts)
                 self.shape.friction = OBSTACLE_FRICTION
                 self.shape.elasticity = ELASTICITY
-                self.shape.color = to_rgba_float(OBSTACKLE_COLORS.get('minefield'))
+                self.shape.color = to_rgba_float(OBSTACLE_COLORS.get('minefield'))
+                self.shape.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('minefield', OBSTACLE_COLORS.get('minefield')))
                 space.add(self.body, self.shape)
     
     def get_height(self):

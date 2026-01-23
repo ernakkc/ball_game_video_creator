@@ -1,6 +1,6 @@
 import pymunk
 from obstacles.base_obstacle import BaseObstacle
-from config.settings import OBSTACKLE_COLORS, DEFAULT_OBSTACLE_COLOR, ELASTICITY, OBSTACLE_FRICTION, OBSTACLE_DENSITY, OBSTACLE_RADIUS, DEFAULT_OBSTACLE_MASS, PLINKO_SPACING_X, PLINKO_SPACING_Y, MAX_OBSTACLE_HEIGHT
+from config.settings import OBSTACLE_COLORS, OBSTACLE_COLORS_EDGE, DEFAULT_OBSTACLE_COLOR, ELASTICITY, OBSTACLE_FRICTION, OBSTACLE_DENSITY, OBSTACLE_RADIUS, DEFAULT_OBSTACLE_MASS, PLINKO_SPACING_X, PLINKO_SPACING_Y, MAX_OBSTACLE_HEIGHT
 from utils.color_utils import to_rgba_float
 
 class Plinko(BaseObstacle):
@@ -23,10 +23,11 @@ class Plinko(BaseObstacle):
                 self.shape.elasticity = ELASTICITY
 
                 # COLOR RESOLUTION 
-                if color is None: resolved = OBSTACKLE_COLORS.get('plinko')
-                elif isinstance(color, str): resolved = OBSTACKLE_COLORS.get(color, OBSTACKLE_COLORS.get('plinko'))
+                if color is None: resolved = OBSTACLE_COLORS.get('plinko')
+                elif isinstance(color, str): resolved = OBSTACLE_COLORS.get(color, OBSTACLE_COLORS.get('plinko'))
                 else: resolved = color
                 self.shape.color = to_rgba_float(resolved)
+                self.shape.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('plinko', resolved))
                 
                 space.add(self.body, self.shape)
     

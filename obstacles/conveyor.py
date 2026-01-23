@@ -1,7 +1,8 @@
 import pymunk
 from obstacles.base_obstacle import BaseObstacle
 from config.settings import (
-    OBSTACKLE_COLORS,
+    OBSTACLE_COLORS,
+    OBSTACLE_COLORS_EDGE,
     DEFAULT_OBSTACLE_COLOR,
     ELASTICITY,
     OBSTACLE_FRICTION,
@@ -35,9 +36,9 @@ class Conveyor(BaseObstacle):
 
         # COLOR
         if color is None:
-            resolved = OBSTACKLE_COLORS.get("slider")
+            resolved = OBSTACLE_COLORS.get("slider")
         elif isinstance(color, str):
-            resolved = OBSTACKLE_COLORS.get(color, OBSTACKLE_COLORS.get("slider"))
+            resolved = OBSTACLE_COLORS.get(color, OBSTACLE_COLORS.get("slider"))
         else:
             resolved = color
 
@@ -48,6 +49,7 @@ class Conveyor(BaseObstacle):
         self.platform.friction = OBSTACLE_FRICTION
         self.platform.elasticity = ELASTICITY
         self.platform.color = rgba
+        self.platform.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('slider', resolved))
         self.platform.surface_velocity = (velocity * direction, 0)
         space.add(self.platform)
 

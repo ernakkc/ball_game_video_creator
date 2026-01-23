@@ -1,7 +1,8 @@
 import pymunk
 from obstacles.base_obstacle import BaseObstacle
 from config.settings import (
-    OBSTACKLE_COLORS,
+    OBSTACLE_COLORS,
+    OBSTACLE_COLORS_EDGE,
     DEFAULT_OBSTACLE_COLOR,
     MAX_OBSTACLE_HEIGHT,
 )
@@ -26,9 +27,9 @@ class GravityWell(BaseObstacle):
         
         # Renk çözümü
         if color is None:
-            resolved = OBSTACKLE_COLORS.get('gravity_well', (150, 50, 255))
+            resolved = OBSTACLE_COLORS.get('gravity_well', (150, 50, 255))
         elif isinstance(color, str):
-            resolved = OBSTACKLE_COLORS.get(color, (150, 50, 255))
+            resolved = OBSTACLE_COLORS.get(color, (150, 50, 255))
         else:
             resolved = color
         
@@ -39,6 +40,7 @@ class GravityWell(BaseObstacle):
         visual_circle.sensor = True
         visual_circle.collision_type = 5  # Gravity well işareti
         visual_circle.color = rgba
+        visual_circle.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('gravity_well', resolved))
         space.add(visual_circle)
         
         # İç çekirdek (görsel efekt için)
@@ -46,6 +48,7 @@ class GravityWell(BaseObstacle):
         core_circle.sensor = True
         core_circle.collision_type = 5
         core_circle.color = to_rgba_float((200, 100, 255, 1.0))
+        core_circle.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('gravity_well', (200, 100, 255)))
         space.add(core_circle)
         
         self.shapes = [visual_circle, core_circle]

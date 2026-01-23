@@ -1,6 +1,6 @@
 import pymunk
 from obstacles.base_obstacle import BaseObstacle
-from config.settings import OBSTACKLE_COLORS, DEFAULT_OBSTACLE_COLOR, ELASTICITY, OBSTACLE_FRICTION
+from config.settings import OBSTACLE_COLORS, OBSTACLE_COLORS_EDGE, DEFAULT_OBSTACLE_COLOR, ELASTICITY, OBSTACLE_FRICTION
 from utils.color_utils import to_rgba_float
 
 class Platform(BaseObstacle):
@@ -14,10 +14,11 @@ class Platform(BaseObstacle):
         self.shape.elasticity = ELASTICITY
 
         # COLOR RESOLUTION 
-        if color is None: resolved = OBSTACKLE_COLORS.get('platform')
-        elif isinstance(color, str): resolved = OBSTACKLE_COLORS.get(color, OBSTACKLE_COLORS.get('platform'))
+        if color is None: resolved = OBSTACLE_COLORS.get('platform')
+        elif isinstance(color, str): resolved = OBSTACLE_COLORS.get(color, OBSTACLE_COLORS.get('platform'))
         else: resolved = color
         self.shape.color = to_rgba_float(resolved)
+        self.shape.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('platform', resolved))
         
         space.add(self.body, self.shape)
         

@@ -2,7 +2,8 @@ import pymunk
 import math
 from obstacles.base_obstacle import BaseObstacle
 from config.settings import (
-    OBSTACKLE_COLORS,
+    OBSTACLE_COLORS,
+    OBSTACLE_COLORS_EDGE,
     DEFAULT_OBSTACLE_COLOR,
     ELASTICITY,
     OBSTACLE_FRICTION,
@@ -22,7 +23,8 @@ class Funnel(BaseObstacle):
         self.shape = pymunk.Poly.create_box(self.body, (400, 30))
         self.shape.friction = OBSTACLE_FRICTION
         self.shape.elasticity = ELASTICITY
-        self.shape.color = to_rgba_float(OBSTACKLE_COLORS.get('funnel'))
+        self.shape.color = to_rgba_float(OBSTACLE_COLORS.get('funnel'))
+        self.shape.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('funnel', OBSTACLE_COLORS.get('funnel')))
         space.add(self.body, self.shape)
 
         # Sağ üst
@@ -32,7 +34,8 @@ class Funnel(BaseObstacle):
         self.shape2 = pymunk.Poly.create_box(self.body2, (400, 30))
         self.shape2.friction = OBSTACLE_FRICTION
         self.shape2.elasticity = ELASTICITY
-        self.shape2.color = to_rgba_float(OBSTACKLE_COLORS.get('funnel'))
+        self.shape2.color = to_rgba_float(OBSTACLE_COLORS.get('funnel'))
+        self.shape2.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('funnel', OBSTACLE_COLORS.get('funnel')))
         space.add(self.body2, self.shape2)
 
         # Alt sol
@@ -42,7 +45,8 @@ class Funnel(BaseObstacle):
         self.shape3 = pymunk.Poly.create_box(self.body3, (400, 30))
         self.shape3.friction = OBSTACLE_FRICTION
         self.shape3.elasticity = ELASTICITY
-        self.shape3.color = to_rgba_float(OBSTACKLE_COLORS.get('funnel'))
+        self.shape3.color = to_rgba_float(OBSTACLE_COLORS.get('funnel'))        
+        self.shape3.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('funnel', OBSTACLE_COLORS.get('funnel')))        
         space.add(self.body3, self.shape3)
 
         # Alt sağ
@@ -52,7 +56,8 @@ class Funnel(BaseObstacle):
         self.shape4 = pymunk.Poly.create_box(self.body4, (400, 30))
         self.shape4.friction = OBSTACLE_FRICTION
         self.shape4.elasticity = ELASTICITY
-        self.shape4.color = to_rgba_float(OBSTACKLE_COLORS.get('funnel'))
+        self.shape4.color = to_rgba_float(OBSTACLE_COLORS.get('funnel'))        
+        self.shape4.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('funnel', OBSTACLE_COLORS.get('funnel')))        
         space.add(self.body4, self.shape4)
     
     def get_height(self):

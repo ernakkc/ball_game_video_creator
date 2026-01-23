@@ -176,6 +176,11 @@ class Game:
                 else:
                     # Normal fizik simülasyonu
                     self.world.space.step(dt)
+                    
+                    # Top hızlarını sınırla
+                    for ball in self.balls:
+                        ball.update(dt)
+                    
                     self.elapsed_time += dt
                     self.level_start_time += dt
                     self.time_elipsed += dt

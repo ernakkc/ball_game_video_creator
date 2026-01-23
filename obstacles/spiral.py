@@ -2,7 +2,7 @@ import pymunk
 import math
 from obstacles.base_obstacle import BaseObstacle
 from config.settings import (
-    OBSTACKLE_COLORS,
+    OBSTACLE_COLORS,
     DEFAULT_OBSTACLE_COLOR,
     ELASTICITY,
     OBSTACLE_FRICTION,
@@ -27,9 +27,9 @@ class Spiral(BaseObstacle):
         
         # Renk çözümü
         if color is None:
-            resolved = OBSTACKLE_COLORS.get('ramp')
+            resolved = OBSTACLE_COLORS.get('ramp')
         elif isinstance(color, str):
-            resolved = OBSTACKLE_COLORS.get(color, OBSTACKLE_COLORS.get('ramp'))
+            resolved = OBSTACLE_COLORS.get(color, OBSTACLE_COLORS.get('ramp'))
         else:
             resolved = color
         

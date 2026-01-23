@@ -1,6 +1,6 @@
 import pymunk
 from entities.base_entity import BaseEntity
-from config.settings import BALL_SIZE, BALL_MASS, BALL_FRICTION, BALL_COLOR, ELASTICITY
+from config.settings import BALL_SIZE, BALL_MASS, BALL_FRICTION, BALL_COLOR, ELASTICITY, MAX_BALL_SPEED
 
 class Ball(BaseEntity):
     def __init__(self, space, x, y):
@@ -51,4 +51,8 @@ class Ball(BaseEntity):
         if clamped:
             self.body.position = x, y
     
-        
+    def update(self, dt):
+        """Topun hızını sınırla"""
+        speed = self.body.velocity.length
+        if speed > MAX_BALL_SPEED:
+            self.body.velocity = (self.body.velocity / speed) * MAX_BALL_SPEED

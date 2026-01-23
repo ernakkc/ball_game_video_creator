@@ -1,6 +1,6 @@
 import pymunk
 from obstacles.base_obstacle import BaseObstacle
-from config.settings import OBSTACKLE_COLORS, DEFAULT_OBSTACLE_COLOR, ELASTICITY, OBSTACLE_FRICTION, OBSTACLE_DENSITY, OBSTACLE_RADIUS, DEFAULT_OBSTACLE_MASS, PLINKO_SPACING_X, PLINKO_SPACING_Y, MAX_OBSTACLE_HEIGHT
+from config.settings import OBSTACLE_COLORS, OBSTACLE_COLORS_EDGE, DEFAULT_OBSTACLE_COLOR, ELASTICITY, OBSTACLE_FRICTION, OBSTACLE_DENSITY, OBSTACLE_RADIUS, DEFAULT_OBSTACLE_MASS, PLINKO_SPACING_X, PLINKO_SPACING_Y, MAX_OBSTACLE_HEIGHT
 from utils.color_utils import to_rgba_float
 
 class Seesaw(BaseObstacle):
@@ -39,10 +39,11 @@ class Seesaw(BaseObstacle):
             shape.elasticity = ELASTICITY
 
             # COLOR RESOLUTION 
-            if color is None: resolved = OBSTACKLE_COLORS.get('seesaw')
-            elif isinstance(color, str): resolved = OBSTACKLE_COLORS.get(color, OBSTACKLE_COLORS.get('seesaw'))
+            if color is None: resolved = OBSTACLE_COLORS.get('seesaw')
+            elif isinstance(color, str): resolved = OBSTACLE_COLORS.get(color, OBSTACLE_COLORS.get('seesaw'))
             else: resolved = color
             shape.color = to_rgba_float(resolved)
+            shape.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('seesaw', resolved))
             
             space.add(body, shape)
 

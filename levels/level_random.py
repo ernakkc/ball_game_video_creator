@@ -10,7 +10,7 @@ from obstacles.conveyor import Conveyor
 from obstacles.windmill import Windmill
 from obstacles.hammer import Hammer
 
-from config.settings import SCREEN_WIDTH, WORLD_HEIGHT, OBSTACKLE_COLORS
+from config.settings import SCREEN_WIDTH, WORLD_HEIGHT, OBSTACLE_COLORS
 
 from datetime import datetime
 import random
@@ -70,7 +70,7 @@ class LevelRandom(BaseLevel):
                 
                 if obstacle:
                     self.obstacles.append(obstacle)
-                    y += obstacle.get_height()  # Dinamik yükseklik
+                    y += obstacle.get_height() + 100  # Ek spacing ile iç içe geçmeyi önle
 
 
 

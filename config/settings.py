@@ -8,6 +8,7 @@ GRAVITY = (0, 1300)  # Gravity vector
 BALL_SIZE = 20  # Default ball size
 BALL_MASS = 1  # Default ball mass
 BALL_FRICTION = 0.6  # Friction coefficient for balls
+MAX_BALL_SPEED = 2000  # Maximum ball speed to prevent tunneling
 
 GATE_TIME = 2.0  # Time a gate remains open (in frames)
 
@@ -75,24 +76,35 @@ BACKGROUNDS = {
 BALL_COLOR = NEON_WHITE
 
 # Obstacle settings
-OBSTACKLE_COLORS = {
-    "wall": NEON_DARK_GRAY,        # Duvar (geri planda kalır)
-    "platform": NEON_ORANGE,       # Ana denge yüzeyi
-    "lucky_cup": NEON_GRAY,        # Şans kupası
-    "plinko": NEON_BLUE,           # Çivi alanı
-    "minefield": NEON_RED,           # Mayın tarlası
-    "seesaw": NEON_GREEN,          # Tahterevalli
-    "bouncer": NEON_PURPLE,        # Trambolin
-    "funnel": NEON_PINK,           # Huni
-    "windmill": NEON_CYAN,         # Yel değirmeni
-    "slider": NEON_YELLOW,         # Yatay kayıcı
-    "hammer": NEON_RED,            # Çekiç
-    "windmill": NEON_TEAL,         # Yel değirmeni
-    "gravity_well": NEON_PURPLE,   # Yerçekimi kuyusu
+OBSTACLE_COLORS = {
+    "wall": NEON_DARK_GRAY,        
+    "platform": (255, 180, 60),    
+    "lucky_cup": (180, 180, 200),  
+    "plinko": (100, 200, 255),     
+    "minefield": (255, 100, 120),  
+    "seesaw": (120, 255, 180),     
+    "bouncer": (220, 120, 255),    
+    "funnel": (255, 150, 200),     
+    "windmill": (100, 255, 255),   # Çift tanımlama kaldırıldı (Cyan seçildi)
+    "slider": (255, 220, 100),     
+    "hammer": (255, 120, 100),     
+    "gravity_well": (200, 100, 255), 
 }
 
-
-# Camera settings
+OBSTACLE_COLORS_EDGE = {
+    "wall": (50, 50, 60),           # ÖNERİ: Duvar sınırları biraz daha belli olsun diye açıldı
+    "platform": (180, 126, 42),     # Gayet iyi
+    "lucky_cup": (126, 126, 140),   # Gayet iyi
+    "plinko": (70, 140, 180),       # Gayet iyi
+    "minefield": (180, 70, 84),     # Gayet iyi
+    "seesaw": (84, 180, 126),       # Gayet iyi
+    "bouncer": (154, 84, 180),      # Gayet iyi
+    "funnel": (180, 105, 140),      # Gayet iyi
+    "windmill": (60, 160, 160),     # Ana renge göre ayarlandı
+    "slider": (190, 140, 40),       # ÖNERİ: Çamurlu sarı yerine "Bal Rengi" kenar
+    "hammer": (180, 84, 70),        # Gayet iyi
+    "gravity_well": (140, 70, 180), # Gayet iyi
+}
 CAMERA_SMOOTH = 0.1  # Camera smoothing factor
 CAMERA_START_Y = 100  # Initial camera Y position (tr: Başlangıç kamera Y konumu)
 CAMERA_OFFSET_Y = 200  # Camera offset from the player (tr: Oyuncudan kamera ofseti. Oyuncunun biraz üstünde konumlandırmak için kullanılır.)
@@ -102,8 +114,8 @@ TRAIL_LENGTH = 10  # Length of the player's trail (performans için azaltıldı)
 # OBSTACLE PHYSICS SETTINGS
 OBSTACLE_DENSITY = 0.6  # Density of obstacles (tr: Engellerin yoğunluğu) 
 OBSTACLE_FRICTION = 1.0  # Friction coefficient for obstacles (tr: Engellerin sürtünme katsayısı)
-ELASTICITY = 0.6  # Elasticity for obstacle collisions (tr: Engellerin çarpışma esnekliği)
-DEFAULT_OBSTACLE_MASS = 10  # Default mass for dynamic obstacles (tr: Dinamik engeller için varsayılan kütle)
+ELASTICITY = 0.8  # Elasticity for obstacle collisions (tr: Engellerin çarpışma esnekliği) - artırıldı
+DEFAULT_OBSTACLE_MASS = 20  # Default mass for dynamic obstacles (tr: Dinamik engeller için varsayılan kütle) - artırıldı
 OBSTACLE_RADIUS = 15  # Default radius for circular obstacles (tr: Dairesel engeller için varsayılan yarıçap)
 MAX_OBSTACLE_HEIGHT = 3000  # Maximum height for obstacles (tr: Engeller için maksimum yükseklik)
 

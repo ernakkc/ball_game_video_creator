@@ -61,11 +61,43 @@ class Renderer:
                     for v in shape.get_vertices()
                 ]
                 pygame.draw.polygon(self.screen, color, verts)
+                
+                # Kenar çizgisi
+                edge_color = getattr(shape, "edge_color", None)
+                if edge_color:
+                    if isinstance(edge_color, (tuple, list)) and len(edge_color) >= 3:
+                        if max(edge_color) <= 1.0:
+                            edge_color_rgb = (
+                                int(edge_color[0] * 255),
+                                int(edge_color[1] * 255),
+                                int(edge_color[2] * 255),
+                            )
+                        else:
+                            edge_color_rgb = tuple(int(c) for c in edge_color[:3])
+                    else:
+                        edge_color_rgb = DEFAULT_OBSTACLE_COLOR
+                    pygame.draw.lines(self.screen, edge_color_rgb, True, verts, 3)
 
             elif isinstance(shape, pymunk.Circle):
                 center = shape.body.local_to_world(shape.offset)
                 pos = vec2px(self, center)
                 pygame.draw.circle(self.screen, color, pos, int(shape.radius))
+                
+                # Kenar çizgisi
+                edge_color = getattr(shape, "edge_color", None)
+                if edge_color:
+                    if isinstance(edge_color, (tuple, list)) and len(edge_color) >= 3:
+                        if max(edge_color) <= 1.0:
+                            edge_color_rgb = (
+                                int(edge_color[0] * 255),
+                                int(edge_color[1] * 255),
+                                int(edge_color[2] * 255),
+                            )
+                        else:
+                            edge_color_rgb = tuple(int(c) for c in edge_color[:3])
+                    else:
+                        edge_color_rgb = DEFAULT_OBSTACLE_COLOR
+                    pygame.draw.circle(self.screen, edge_color_rgb, pos, int(shape.radius), 3)
 
             elif isinstance(shape, pymunk.Segment):
                 a = shape.body.local_to_world(shape.a)
@@ -80,6 +112,22 @@ class Renderer:
                     pb,
                     max(1, int(shape.radius * 2))
                 )
+                
+                # Kenar çizgisi
+                edge_color = getattr(shape, "edge_color", None)
+                if edge_color:
+                    if isinstance(edge_color, (tuple, list)) and len(edge_color) >= 3:
+                        if max(edge_color) <= 1.0:
+                            edge_color_rgb = (
+                                int(edge_color[0] * 255),
+                                int(edge_color[1] * 255),
+                                int(edge_color[2] * 255),
+                            )
+                        else:
+                            edge_color_rgb = tuple(int(c) for c in edge_color[:3])
+                    else:
+                        edge_color_rgb = DEFAULT_OBSTACLE_COLOR
+                    pygame.draw.line(self.screen, edge_color_rgb, pa, pb, 4)
     
     def draw_balls(self, balls):
         """İzli topları çizer (trajectory ile)"""

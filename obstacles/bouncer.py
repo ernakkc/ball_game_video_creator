@@ -2,7 +2,8 @@ import pymunk
 from random import choice
 from obstacles.base_obstacle import BaseObstacle
 from config.settings import (
-    OBSTACKLE_COLORS,
+    OBSTACLE_COLORS,
+    OBSTACLE_COLORS_EDGE,
     DEFAULT_OBSTACLE_COLOR,
     ELASTICITY,
     OBSTACLE_FRICTION,
@@ -20,9 +21,9 @@ class Bouncer(BaseObstacle):
         
         # Renk çözümü
         if color is None:
-            resolved = OBSTACKLE_COLORS.get('pinball')
+            resolved = OBSTACLE_COLORS.get('pinball')
         elif isinstance(color, str):
-            resolved = OBSTACKLE_COLORS.get(color, OBSTACKLE_COLORS.get('pinball'))
+            resolved = OBSTACLE_COLORS.get(color, OBSTACLE_COLORS.get('pinball'))
         else:
             resolved = color
         
@@ -48,6 +49,7 @@ class Bouncer(BaseObstacle):
                 shape.friction = OBSTACLE_FRICTION
                 shape.elasticity = 2.0  # Çok yüksek - güçlü zıplama
                 shape.color = rgba
+                shape.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('bouncer', resolved))
                 
                 space.add(body, shape)
                 self.bodies.append(body)

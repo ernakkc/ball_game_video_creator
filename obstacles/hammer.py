@@ -2,7 +2,8 @@ import pymunk
 import math
 from obstacles.base_obstacle import BaseObstacle
 from config.settings import (
-    OBSTACKLE_COLORS,
+    OBSTACLE_COLORS,
+    OBSTACLE_COLORS_EDGE,
     DEFAULT_OBSTACLE_COLOR,
     ELASTICITY,
     OBSTACLE_FRICTION,
@@ -51,9 +52,9 @@ class Hammer(BaseObstacle):
         
         # Renk çözümü
         if color is None:
-            resolved = OBSTACKLE_COLORS.get('hammer')
+            resolved = OBSTACLE_COLORS.get('hammer')
         elif isinstance(color, str):
-            resolved = OBSTACKLE_COLORS.get(color, OBSTACKLE_COLORS.get('hammer'))
+            resolved = OBSTACLE_COLORS.get(color, OBSTACLE_COLORS.get('hammer'))
         else:
             resolved = color
         
@@ -64,6 +65,7 @@ class Hammer(BaseObstacle):
         arm.friction = OBSTACLE_FRICTION
         arm.elasticity = ELASTICITY
         arm.color = rgba
+        arm.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('hammer', resolved))
         space.add(arm)
         
         # Çekiç başı (circle)
@@ -71,6 +73,7 @@ class Hammer(BaseObstacle):
         hammer_head.friction = OBSTACLE_FRICTION
         hammer_head.elasticity = 1.5  # Yüksek elasticity - itiyor
         hammer_head.color = rgba
+        hammer_head.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('hammer', resolved))
         space.add(hammer_head)
         
         # Başlangıç momentum (sallanmaya başlasın)

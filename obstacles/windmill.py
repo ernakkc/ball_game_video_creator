@@ -2,7 +2,8 @@ import math
 import pymunk
 from obstacles.base_obstacle import BaseObstacle
 from config.settings import (
-    OBSTACKLE_COLORS,
+    OBSTACLE_COLORS,
+    OBSTACLE_COLORS_EDGE,
     DEFAULT_OBSTACLE_COLOR,
     ELASTICITY,
     OBSTACLE_FRICTION,
@@ -49,7 +50,7 @@ class Windmill(BaseObstacle):
         self.blades = []
         angle_step = 2 * math.pi / blade_count
         
-        rgba = to_rgba_float(OBSTACKLE_COLORS.get('windmill'))
+        rgba = to_rgba_float(OBSTACLE_COLORS.get('windmill'))
         
         for i in range(blade_count):
             angle = i * angle_step
@@ -66,6 +67,7 @@ class Windmill(BaseObstacle):
             blade.friction = OBSTACLE_FRICTION
             blade.elasticity = ELASTICITY
             blade.color = rgba
+            blade.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('windmill', OBSTACLE_COLORS.get('windmill')))
             
             # Başlangıç açısı ayarla (angle is already in radians)
             self.body.angle = angle

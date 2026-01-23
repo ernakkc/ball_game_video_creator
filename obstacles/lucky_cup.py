@@ -2,7 +2,8 @@ import math
 import pymunk
 from obstacles.base_obstacle import BaseObstacle
 from config.settings import (
-    OBSTACKLE_COLORS,
+    OBSTACLE_COLORS,
+    OBSTACLE_COLORS_EDGE,
     DEFAULT_OBSTACLE_COLOR,
     OBSTACLE_FRICTION,
     ELASTICITY,
@@ -50,7 +51,7 @@ class LuckyCup(BaseObstacle):
                     py = math.sin(ang) * radius
                     points.append((px, py))
 
-                color = OBSTACKLE_COLORS.get('lucky_cup')
+                color = OBSTACLE_COLORS.get('lucky_cup')
 
                 self.segments = []
                 half_gap = 70 / 2
@@ -63,6 +64,7 @@ class LuckyCup(BaseObstacle):
                     seg.friction = OBSTACLE_FRICTION
                     seg.elasticity = ELASTICITY
                     seg.color = to_rgba_float(color=color)
+                    seg.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('lucky_cup', color))
                     self.segments.append(seg)
 
                 space.add(self.body, *self.segments)
