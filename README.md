@@ -1,11 +1,52 @@
 # Ball Game Video Creator
 
+Bu proje, Pygame ve Pymunk kütüphanelerini kullanarak fizik tabanlı top oyunları simüle eden ve video çıkışı üreten bir Python uygulamasıdır. Kullanıcılar, çeşitli seviyeler ve engellerle top oyunları tasarlayabilir ve bunları video olarak kaydedebilir.
+
+## Özellikler
+
+- Fizik tabanlı simülasyon (Pymunk kullanarak)
+- Birden fazla top desteği (isim, fotoğraf, renk, ses ile özelleştirilebilir)
+- Çeşitli engeller: platformlar, spinner'lar, vb.
+- Kamera takibi ve smoothing
+- Video/frame çıkışı
+- Rastgele ve özel seviyeler
+
+## Kurulum
+
+1. Gerekli bağımlılıkları yükleyin:
+   ```
+   pip install -r requirements.txt
+   ```
+
+2. Kullanıcı ayarlarını `config/user_settings.py` dosyasında yapılandırın:
+   - Top sayısı (NUM_MARBLES)
+   - İsimler (NAMES)
+   - Fotoğraflar (assets/photos/ klasörüne ekleyin)
+   - Renkler (otomatik olarak rastgele seçilir)
+
+## Kullanım
+
+1. Ana dosyayı çalıştırın:
+   ```
+   python main.py
+   ```
+
+2. Seviye yükleyin (örneğin, level_random):
+   ```python
+   game.load_level(LevelRandom)
+   ```
+
+3. Oyun döngüsü başlayacak ve video çerçeveleri `output_frames/` klasörüne kaydedilecek.
+
+## Proje Yapısı
+
 ball-game-video-creator/
 │
 ├── main.py                     # Programın girişi (loop burada)
 │
 ├── config/
-│   ├── settings.py             # Ekran, FPS, gravity, renkler
+│   ├── settings.py             # Ekran, FPS, gravity, renkler     
+│   ├── user_settings.py        # Kullanıcı ayarları (isim, fotoğraf vs)
 │   └── constants.py            # Sabit sayılar (collision type vs)
 │
 ├── core/
