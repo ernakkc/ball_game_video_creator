@@ -23,6 +23,7 @@ class BallSetupUI(tk.Tk):
         self.resizable(False, False)
         self.configure(bg='#232946')
         self.ball_count = tk.IntVar(value=4)
+        self.video_count = tk.IntVar(value=1)
         self.ball_configs = []
         self.status_var = tk.StringVar(value='Ready')
         self.create_widgets()
@@ -40,6 +41,10 @@ class BallSetupUI(tk.Tk):
         # Ball count selection
         tk.Label(self, text='Ball Count:', font=('Arial', 14, 'bold'), bg='#232946', fg='#eebbc3').place(x=30, y=30)
         tk.Spinbox(self, from_=2, to=12, textvariable=self.ball_count, width=5, font=('Arial', 14), command=self.update_ball_list).place(x=150, y=30)
+        
+        # Video count selection
+        tk.Label(self, text='Video Count:', font=('Arial', 14, 'bold'), bg='#232946', fg='#eebbc3').place(x=250, y=30)
+        tk.Spinbox(self, from_=1, to=10, textvariable=self.video_count, width=5, font=('Arial', 14)).place(x=370, y=30)
         
         # Ball list frame
         self.ball_frame = tk.Frame(self, bg='#232946')
@@ -143,7 +148,8 @@ class BallSetupUI(tk.Tk):
             import sys
             import subprocess
             self.save_user_settings()
-            self.status_var.set('Creating video...')
+            video_count = self.video_count.get()
+            self.status_var.set(f'Creating {video_count} video(s)...')
             try:
                 self.start_btn.config(state='disabled')
             except:
@@ -154,25 +160,38 @@ class BallSetupUI(tk.Tk):
             self.log_text.delete('1.0', tk.END)
             self.log_text.config(state='disabled')
 
-            cmd = [sys.executable, os.path.join(os.path.dirname(__file__), '..', 'main.py')]
-            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
+            for video_num in range(1, video_count + 1):
+                if video_count > 1:
+                    self.append_log(f'=== Creating Video {video_num}/{video_count} ===', tag='info')
+                
+                cmd = [sys.executable, os.path.join(os.path.dirname(__file__), '..', 'main.py')]
+                proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
 
-            for line in proc.stdout:
-                line = line.rstrip()
-                if not line:
-                    continue
-                self.append_log(line)
-                # Son satırı status olarak da göster
-                self.status_var.set(line[-120:])
-                self.log_text.see(tk.END)
+                for line in proc.stdout:
+                    line = line.rstrip()
+                    if not line:
+                        continue
+                    self.append_log(line)
+                    # Son satırı status olarak da göster
+                    self.status_var.set(line[-120:])
+                    self.log_text.see(tk.END)
 
-            proc.wait()
-            if proc.returncode == 0:
-                self.append_log('Video created!', tag='ok')
-                self.status_var.set('Video created!')
+                proc.wait()
+                if proc.returncode == 0:
+                    if video_count > 1:
+                        self.append_log(f'Video {video_num} created successfully!', tag='ok')
+                    else:
+                        self.append_log('Video created!', tag='ok')
+                else:
+                    self.append_log(f'Error creating video {video_num}: process code {proc.returncode}', tag='err')
+                    break  # Hata olursa sonraki videoları üretme
+
+            if video_count > 1:
+                self.append_log(f'All {video_count} videos completed!', tag='ok')
+                self.status_var.set(f'All {video_count} videos created!')
             else:
-                self.append_log(f'Error: process code {proc.returncode}', tag='err')
-                self.status_var.set(f'Error: process code {proc.returncode}')
+                self.status_var.set('Video created!')
+                
         except Exception as e:
             self.append_log(f'Error: {e}', tag='err')
             self.status_var.set(f'Error: {e}')
