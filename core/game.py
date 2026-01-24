@@ -212,7 +212,7 @@ class Game:
                         sound_file = current_leader.sound
                         
                         # Comments'e tuple olarak ekle (IFBL_python tarzı)
-                        self.comments.append((self.frame_count, f"{new_leader_name} liderliği {old_leader_name}'den aldı!", sound_file))
+                        self.comments.append((self.frame_count, f"{new_leader_name} took leadership from {old_leader_name}!", sound_file))
                         
                         # Oyun sırasında sesi çal (sadece oynarken duyulsun) - DÖNGÜ İLE
                         try:

@@ -63,7 +63,12 @@ if __name__ == '__main__':
 
         print("Game Results:")
         for key, value in results.items():
-            print(f"{key}: {value}")
+            try:
+                print(f"{key}: {value}")
+            except UnicodeEncodeError:
+                # Handle Windows console encoding issues
+                safe_value = str(value).encode('cp1252', errors='replace').decode('cp1252')
+                print(f"{key}: {safe_value}")
 
         frame_count = results['frame_count']
         comments = results.get('comments', [])
