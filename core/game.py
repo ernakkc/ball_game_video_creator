@@ -144,7 +144,7 @@ class Game:
 
     def run(self):
         self.running = True
-        self.log('🏁 Oyun başlatıldı!')
+        self.log('Oyun baslatildi!')
         self.leader = None
         self.comments = [] # Lider değişimlerini kaydet
         self.frame_count = 0
@@ -291,7 +291,7 @@ class Game:
             finish_y = WORLD_HEIGHT - 100  # Finiş çizgisi
             marble_bodies = [ball.body for ball in self.balls]
             if any(body.position[1] >= finish_y for body in marble_bodies):  # Herhangi bir top finişe ulaştıysa
-                self.log(f"\n🏁 GAME FINISHED! 🏁")
+                self.log(f"\nGAME FINISHED!")
                 winner_body = max(marble_bodies, key=lambda b: b.position[1])  # En uzakta olan topu bul (şampiyon)
                 winner_ball = max(self.balls, key=lambda b: b.body.position[1])  # Şampiyon top objesi
                 self.log(f"CHAMPION: {winner_ball.name}")
