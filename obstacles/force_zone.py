@@ -42,7 +42,7 @@ class ForceZone(BaseObstacle):
 
         # Fill rengini neredeyse tamamen şeffaf yap
         rgba = to_rgba_float(push_color)
-        rgba = (rgba[0], rgba[1], rgba[2], 0.08)  # Alpha ~1%
+        rgba = (rgba[0], rgba[1], rgba[2], 0.1)  # Alpha ~1%
 
         self.body = pymunk.Body(body_type=pymunk.Body.STATIC)
         self.body.position = x, y

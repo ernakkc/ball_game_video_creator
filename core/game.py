@@ -17,6 +17,9 @@ from entities.ball import Ball
 from entities.screen_text import ScreenText
 
 class Game:
+        def log(self, msg, level='info'):
+            tag = {'info': '[INFO]', 'warn': '[WARN]', 'err': '[ERR]', 'ok': '[OK]'}.get(level, '[INFO]')
+            print(f"{tag} {msg}")
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
@@ -141,6 +144,7 @@ class Game:
 
     def run(self):
         self.running = True
+        self.log('🏁 Oyun başlatıldı!')
         self.leader = None
         self.comments = [] # Lider değişimlerini kaydet
         self.frame_count = 0
@@ -217,9 +221,9 @@ class Game:
                             sound = pygame.mixer.Sound(sound_file)
                             sound.set_volume(0.5)
                             self.leader_sound_channel.play(sound, loops=-1)  # Sonsuz döngü (-1)
-                            print(f"🔊 Ses döngüde çalıyor: {new_leader_name}")
+                            self.log(f"🔊 Ses döngüde çalıyor: {new_leader_name}")
                         except Exception as e:
-                            print(f"Ses çalma hatası: {e}")
+                            self.log(f"Ses çalma hatası: {e}", level='warn')
                         self.leader = current_leader
                     
                     # Gravity well etkilerini uygula
@@ -235,7 +239,7 @@ class Game:
                             if math.isnan(body.position.x) or math.isnan(body.position.y):
                                 body.position = (SCREEN_WIDTH / 2, 600)
                                 body.velocity = (0, 0)
-                                print(f"🔧 {ball.name} pozisyonu sıfırlandı (NaN)")
+                                self.log(f"🔧 {ball.name} pozisyonu sıfırlandı (NaN)")
                                 continue
                             
                             # Son Y pozisyonu kaydedildiyse
@@ -243,16 +247,16 @@ class Game:
                                 # 5 pikselden az hareket ettiyse (sıkıştı!)
                                 if abs(body.position.y - ball.last_y) < 5:
                                     ball.stuck_count += 1
-                                    
                                     # 1.5 saniyeden fazla sıkışıksa
                                     if ball.stuck_count > FPS * 1.5:
-                                        # Güçlü rastgele itme uygula (kurtar!)
-                                        body.apply_impulse_at_local_point(
-                                            (random.uniform(-200, 200), random.uniform(-300, -100)), 
-                                            (0, 0)
-                                        )
+                                        # DAHA ŞİDDETLİ ve YUKARI + SAĞ/SOL güçlü rastgele itme uygula
+                                        angle = random.uniform(-1.2, 1.2)  # -1.2 ~ 1.2 radian (yaklaşık -70° ile +70°)
+                                        power = random.uniform(1200, 2000)  # Daha yüksek güç
+                                        fx = math.sin(angle) * power
+                                        fy = -abs(math.cos(angle) * power)  # Yukarıya doğru
+                                        body.apply_impulse_at_local_point((fx, fy), (0, 0))
                                         ball.stuck_count = 0
-                                        print(f"⚠️ {ball.name} sıkıştı, kurtarma itme uygulandı!")
+                                        self.log(f"⚠️ {ball.name} sıkıştı, ŞİDDETLİ kurtarma! (fx={fx:.0f}, fy={fy:.0f})")
                                     
                                     # 4 saniye hala sıkışıksa (kritik)
                                     if ball.stuck_count > FPS * 4:
@@ -267,7 +271,7 @@ class Game:
                                             )
                                             body.velocity = (0, 0)
                                             ball.stuck_count = 0
-                                            print(f"🚀 {ball.name} teleport edildi!")
+                                            self.log(f"🚀 {ball.name} teleport edildi!")
                                 else:
                                     # Hareket ediyorsa sayacı sıfırla
                                     ball.stuck_count = 0
@@ -287,11 +291,11 @@ class Game:
             finish_y = WORLD_HEIGHT - 100  # Finiş çizgisi
             marble_bodies = [ball.body for ball in self.balls]
             if any(body.position[1] >= finish_y for body in marble_bodies):  # Herhangi bir top finişe ulaştıysa
-                print(f"\n🏁 YARIŞ BİTTİ! 🏁")  # Konsola yazdır
+                self.log(f"\n🏁 YARIŞ BİTTİ! 🏁")
                 winner_body = max(marble_bodies, key=lambda b: b.position[1])  # En uzakta olan topu bul (şampiyon)
                 winner_ball = max(self.balls, key=lambda b: b.body.position[1])  # Şampiyon top objesi
-                print(f"ŞAMPİYON: {winner_ball.name}")  # Şampiyon ismini yazdır
-                print(f"SÜRE: {self.elapsed_time:.2f}s")  # Bitiş süresini yazdır
+                self.log(f"ŞAMPİYON: {winner_ball.name}")
+                self.log(f"SÜRE: {self.elapsed_time:.2f}s")
 
                 # === 3 saniye bekle (oyun devam etsin, şampiyon ekranı gelmesin) ===
                 wait_frames = int(FPS * 3)
@@ -354,6 +358,36 @@ class Game:
                     # Basit altın çember (alpha olmadan daha hızlı)
                     pygame.draw.circle(self.screen, (255, 215, 0), (int(x), int(screen_y)), leader_ball.size + 10, 3)
                     pygame.draw.circle(self.screen, (255, 240, 100), (int(x), int(screen_y)), leader_ball.size + 6, 2)
+
+                # ==================== GERİDE KALAN TOPLARI YAKALA (respawn & catch-up)
+                for i, ball in enumerate(self.balls):
+                    if ball is leader_ball:
+                        continue
+                    try:
+                        if leader_ball.body.position.y - ball.body.position.y > 800:
+                            import random
+                            new_x = leader_ball.body.position.x + random.uniform(-100, 100)
+                            new_x = max(ball.size + 15, min(new_x, SCREEN_WIDTH - ball.size - 15))
+                            new_y = leader_ball.body.position.y - 800
+                            ball.body.position = (new_x, new_y)
+                            ball.body.velocity = (0, 400)
+                            ball.catching_up = True
+                            self.log(f"⏩ {ball.name} yakalama modunda! (y={int(new_y)})")
+                    except Exception:
+                        pass
+
+                # Eğer catch-up aktifse, hızlandır (ekrana girene kadar)
+                for ball in self.balls:
+                    if getattr(ball, 'catching_up', False):
+                        screen_y_b = ball.body.position.y - self.camera.y
+                        if screen_y_b > -50:
+                            ball.catching_up = False
+                            self.log(f"✅ {ball.name} ekrana girdi, hızlandırma bitti.")
+                        else:
+                            dt = max(1.0 / FPS, self.clock.get_time() / 1000.0)
+                            vx, vy = ball.body.velocity
+                            vy = min(vy + 400 * dt, 1200)
+                            ball.body.velocity = (vx, vy)
             
             # Topları izleriyle çiz
             self.renderer.draw_balls(self.balls)

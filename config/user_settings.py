@@ -7,23 +7,26 @@ MIN_MARBLES = 2
 NUM_MARBLES = 4
 
 NAMES = [
-    "Turkey",
-    "ABD",
-    "Germany",
-    "France"
-    ]
-
-# Randomly sample colors for marbles
-COLORS = sample(COLORS, NUM_MARBLES)
-
-# Load photos from assets/photos directory
-PHOTOS = []
-for file in os.listdir(os.path.join("assets", "photos")):
-    if file.endswith(".png") or file.endswith(".jpg"):
-        PHOTOS.append(os.path.join("assets", "photos", file))
-
-# Load sounds from assets/sounds directory
-SOUNDS = []
-for file in os.listdir(os.path.join("assets", "sounds")):
-    if file.endswith(".wav") or file.endswith(".mp3"):
-        SOUNDS.append(os.path.join("assets", "sounds", file))
+    "Ahmet",
+    "Mehmet",
+    "Osman",
+    "Hüseyin",
+]
+COLORS = [
+    (255,255,255),
+    (255,255,255),
+    (255,255,255),
+    (255,255,255),
+]
+PHOTOS = [
+    r"/Users/erenakkoc/Desktop/ball_game_video_creator/assets/photos/france.png",
+    r"/Users/erenakkoc/Desktop/ball_game_video_creator/assets/photos/germany.png",
+    r"/Users/erenakkoc/Desktop/ball_game_video_creator/assets/photos/ABD.png",
+    r"/Users/erenakkoc/Desktop/ball_game_video_creator/assets/photos/turkey.png",
+]
+SOUNDS = [
+    r"/Users/erenakkoc/Desktop/ball_game_video_creator/assets/sounds/suriye-milli-marsi.mp3",
+    r"/Users/erenakkoc/Desktop/ball_game_video_creator/assets/sounds/sen-ayri-trende-ben-ayri-garda.mp3",
+    r"/Users/erenakkoc/Desktop/ball_game_video_creator/assets/sounds/keloglan-jenerik-sesi-fulleyin.mp3",
+    r"/Users/erenakkoc/Desktop/ball_game_video_creator/assets/sounds/askim-cok-pardon.mp3",
+]

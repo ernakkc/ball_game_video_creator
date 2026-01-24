@@ -34,6 +34,7 @@ class LevelRandom(BaseLevel):
 
     def build(self):
         y = 400
+        max_y = WORLD_HEIGHT - 1000  # Sonlara yaklaşınca engel ekleme
 
         OBSTACLES = [
             'bouncer', # düz top sektirici
@@ -56,6 +57,8 @@ class LevelRandom(BaseLevel):
             random.shuffle(OBSTACLES)
 
             for obstacle_name in OBSTACLES:
+                if y > max_y:
+                    break
                 obstacle = None
                 if obstacle_name == 'plinko':
                     obstacle = Plinko(self.space, 0, y, 20, 9, color='plinko')

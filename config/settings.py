@@ -2,7 +2,7 @@
 import os
 
 WIDTH, HEIGHT = 540, 960  # 9:16 aspect ratio
-WORLD_HEIGHT = 42000 # Total height of the game world
+WORLD_HEIGHT = 21000 # Total height of the game world (yarıya indirildi)
 FPS = 60  # Frames per second
 GRAVITY = (0, 1300)  # Gravity vector
 BALL_SIZE = 20  # Default ball size
