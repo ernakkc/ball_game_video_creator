@@ -54,4 +54,4 @@ class GravityWell(BaseObstacle):
         self.shapes = [visual_circle, core_circle]
     
     def get_height(self):
-        return self.radius * 2 + 100
+        return 600

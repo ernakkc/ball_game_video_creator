@@ -6,7 +6,7 @@ WORLD_HEIGHT = 42000 # Total height of the game world
 FPS = 60  # Frames per second
 GRAVITY = (0, 1300)  # Gravity vector
 BALL_SIZE = 20  # Default ball size
-BALL_MASS = 1  # Default ball mass
+BALL_MASS = 2  # Default ball mass - artırıldı
 BALL_FRICTION = 0.6  # Friction coefficient for balls
 MAX_BALL_SPEED = 2000  # Maximum ball speed to prevent tunneling
 MAX_PARTICLES = 200  # Maximum number of particles on screen
@@ -115,7 +115,7 @@ TRAIL_LENGTH = 10  # Length of the player's trail (performans için azaltıldı)
 # OBSTACLE PHYSICS SETTINGS
 OBSTACLE_DENSITY = 0.6  # Density of obstacles (tr: Engellerin yoğunluğu) 
 OBSTACLE_FRICTION = 1.0  # Friction coefficient for obstacles (tr: Engellerin sürtünme katsayısı)
-ELASTICITY = 0.8  # Elasticity for obstacle collisions (tr: Engellerin çarpışma esnekliği) - artırıldı
+ELASTICITY = 0.6  # Elasticity for obstacle collisions (tr: Engellerin çarpışma esnekliği) - azaltıldı
 DEFAULT_OBSTACLE_MASS = 20  # Default mass for dynamic obstacles (tr: Dinamik engeller için varsayılan kütle) - artırıldı
 OBSTACLE_RADIUS = 15  # Default radius for circular obstacles (tr: Dairesel engeller için varsayılan yarıçap)
 MAX_OBSTACLE_HEIGHT = 3000  # Maximum height for obstacles (tr: Engeller için maksimum yükseklik)

@@ -182,6 +182,11 @@ class Game:
                     # Normal fizik simülasyonu
                     self.world.space.step(dt)
                     
+                    # Obstacle'ları güncelle (hareketli olanlar için)
+                    for obstacle in self.level.obstacles:
+                        if hasattr(obstacle, 'update'):
+                            obstacle.update(dt)
+                    
                     # Top hızlarını sınırla
                     for ball in self.balls:
                         ball.update(dt)
@@ -340,15 +345,15 @@ class Game:
             if self.balls:
                 leader = max(self.balls, key=lambda b: b.body.position.y)
                 leader_y = leader.body.position.y
-                if leader_y < 2000:
+                if leader_y < WORLD_HEIGHT * 0.2:
                     zone_name = "Başlangıç"
-                elif leader_y < 5000:
+                elif leader_y < WORLD_HEIGHT * 0.4:
                     zone_name = "İlk Bölge"
-                elif leader_y < 8000:
+                elif leader_y < WORLD_HEIGHT * 0.6:
                     zone_name = "İkinci Bölge"
-                elif leader_y < 12000:
+                elif leader_y < WORLD_HEIGHT * 0.8:
                     zone_name = "Üçüncü Bölge"
-                elif leader_y < 16000:
+                elif leader_y < WORLD_HEIGHT * 0.9:
                     zone_name = "Dördüncü Bölge"
                 else:
                     zone_name = "Final"

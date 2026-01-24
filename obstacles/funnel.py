@@ -61,4 +61,4 @@ class Funnel(BaseObstacle):
         space.add(self.body4, self.shape4)
     
     def get_height(self):
-        return 600  # Total funnel height
+        return 700  # Total funnel height

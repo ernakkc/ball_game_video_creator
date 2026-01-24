@@ -14,8 +14,9 @@ from utils.color_utils import to_rgba_float
 class Spiral(BaseObstacle):
     """Spiral ramp - toplar dönüş yaparak aşağı iner"""
     
-    def __init__(self, space, x, y, radius=100, turns=2, segments=50, 
-                 thickness=4, color=DEFAULT_OBSTACLE_COLOR):
+    def __init__(self, space
+    , x, y, radius=30, turns=8, segments=500, 
+                 thickness=8, color=DEFAULT_OBSTACLE_COLOR):
         super().__init__(space)
         
         if y > MAX_OBSTACLE_HEIGHT:
@@ -59,3 +60,6 @@ class Spiral(BaseObstacle):
             self.segments.append(seg)
         
         space.add(self.body, *self.segments)
+
+    def get_height(self):
+        return 900  # Yaklaşık yükseklik

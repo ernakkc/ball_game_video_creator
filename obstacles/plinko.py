@@ -12,9 +12,6 @@ class Plinko(BaseObstacle):
                 peg_x = x + i * PLINKO_SPACING_X + (j % 2) * (PLINKO_SPACING_X / 2)
                 peg_y = y + j * PLINKO_SPACING_Y
 
-                if peg_x < 0 or peg_x > 2000 or peg_y > MAX_OBSTACLE_HEIGHT:
-                    continue  # Skip pegs outside the desired range
-
                 self.body = pymunk.Body(body_type=pymunk.Body.STATIC)
                 self.body.position = peg_x, peg_y
                 self.shape = pymunk.Circle(self.body, OBSTACLE_RADIUS)
@@ -32,4 +29,4 @@ class Plinko(BaseObstacle):
                 space.add(self.body, self.shape)
     
     def get_height(self):
-        return self.y_count * PLINKO_SPACING_Y + 150
+        return 1100

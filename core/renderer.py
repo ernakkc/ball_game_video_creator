@@ -46,6 +46,41 @@ class Renderer:
         for star in self.stars:
             pygame.draw.circle(self.screen, (255, 255, 255), (int(star['x']), int(star['y'])), max(1, int(star['size'])))
 
+        # ForceZone'ları önce çiz (arka planda kalsınlar)
+        for shape in list(space.shapes):
+            if isinstance(shape, pymunk.Circle) and getattr(shape, 'collision_type', None) == 2:
+                center = shape.body.local_to_world(shape.offset)
+                pos = vec2px(self, center)
+                pcol = getattr(shape, 'push_color', (200, 200, 200))
+                surf_size = int(shape.radius * 2 + 8)
+                temp_surf = pygame.Surface((surf_size, surf_size), pygame.SRCALPHA)
+                c = (surf_size // 2, surf_size // 2)
+                # Çok hafif dolgu (neredeyse görünmez)
+                pygame.draw.circle(temp_surf, (pcol[0], pcol[1], pcol[2], 8), c, int(shape.radius))
+                # Ok çok hafif
+                arrow_length = shape.radius * 0.7
+                arrow_alpha = 40
+                if getattr(shape, 'push_direction', 'up') == 'up':
+                    start = (c[0], c[1] + int(arrow_length / 2))
+                    end = (c[0], c[1] - int(arrow_length))
+                    head = [(end[0] - 6, end[1] + 10), (end[0] + 6, end[1] + 10), end]
+                elif getattr(shape, 'push_direction') == 'down':
+                    start = (c[0], c[1] - int(arrow_length / 2))
+                    end = (c[0], c[1] + int(arrow_length))
+                    head = [(end[0] - 6, end[1] - 10), (end[0] + 6, end[1] - 10), end]
+                elif getattr(shape, 'push_direction') == 'left':
+                    start = (c[0] + int(arrow_length / 2), c[1])
+                    end = (c[0] - int(arrow_length), c[1])
+                    head = [(end[0] + 10, end[1] - 6), (end[0] + 10, end[1] + 6), end]
+                else:
+                    start = (c[0] - int(arrow_length / 2), c[1])
+                    end = (c[0] + int(arrow_length), c[1])
+                    head = [(end[0] - 10, end[1] - 6), (end[0] - 10, end[1] + 6), end]
+
+                pygame.draw.line(temp_surf, (pcol[0], pcol[1], pcol[2], arrow_alpha), start, end, 3)
+                pygame.draw.polygon(temp_surf, (pcol[0], pcol[1], pcol[2], arrow_alpha), head)
+                self.screen.blit(temp_surf, (pos[0] - surf_size // 2, pos[1] - surf_size // 2))
+
         for shape in space.shapes:
             color = getattr(shape, "color", DEFAULT_OBSTACLE_COLOR)
 
@@ -109,10 +144,12 @@ class Renderer:
                         pygame.draw.line(self.screen, (200, 200, 200), (min(x_coords), inner_y), (max(x_coords), inner_y), 1)
 
             elif isinstance(shape, pymunk.Circle):
+                # ForceZone'ları skip et (zaten en başta çizildi)
+                if getattr(shape, 'collision_type', None) == 2:
+                    continue
                 center = shape.body.local_to_world(shape.offset)
                 pos = vec2px(self, center)
                 pygame.draw.circle(self.screen, color, pos, int(shape.radius))
-                
                 # Kenar çizgisi
                 edge_color = getattr(shape, "edge_color", None)
                 if edge_color:

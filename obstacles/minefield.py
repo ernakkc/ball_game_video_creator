@@ -16,10 +16,6 @@ class Minefield(BaseObstacle):
                 # rasgele dağılım
                 mine_x = randint(x + x_counter * 120 - 30, x + x_counter * 120 + 30)
                 mine_y = randint(y + y_counter * 120 - 30, y + y_counter * 120 + 30)
-
-                if mine_x < 0 or mine_x > 2000 or mine_y > MAX_OBSTACLE_HEIGHT:
-                    continue  # Skip mines outside the desired range
-                
                 size = 15
                 verts = [(-size, -size), (size, -size), (0, size)]  # Eşkenar üçgen
                 self.body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
@@ -33,5 +29,5 @@ class Minefield(BaseObstacle):
                 space.add(self.body, self.shape)
     
     def get_height(self):
-        return 8 * 120 + 100  # 8 rows of mines plus spacing
+        return 1000  
 

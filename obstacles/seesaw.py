@@ -56,4 +56,4 @@ class Seesaw(BaseObstacle):
         self.body = self.bodies[0] if self.bodies else None
     
     def get_height(self):
-        return 1000  # 4 seesaw ile toplam yükseklik
+        return 900  # 4 seesaw ile toplam yükseklik

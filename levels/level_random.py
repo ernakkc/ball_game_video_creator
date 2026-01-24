@@ -9,6 +9,10 @@ from obstacles.funnel import Funnel
 from obstacles.conveyor import Conveyor
 from obstacles.windmill import Windmill
 from obstacles.hammer import Hammer
+from obstacles.gravity_well import GravityWell
+from obstacles.force_zone import ForceZone
+from obstacles.spiral import Spiral
+from obstacles.wave_slider import WaveSlider
 
 from config.settings import SCREEN_WIDTH, WORLD_HEIGHT, OBSTACLE_COLORS
 
@@ -32,18 +36,22 @@ class LevelRandom(BaseLevel):
         y = 400 # Starting Y position
 
         OBSTACLES = [
-            'plinko',
-            'lucky_cup',
-            'minefield',
-            'seesaw',
-            'bouncer',
-            'funnel',
-            'conveyor',
-            'windmill',
-            'hammer',
+            'bouncer', # düz top sektirici
+            'conveyor', # hareketli bant
+            'force_zone', # kuvvet bölgesi
+            'funnel', # huni
+            'gravity_well', # yerçekimi kuyusu
+            'hammer', # çekiç
+            'lucky_cup', # şanslı kupa
+            'minefield', # mayın tarlası
+            'plinko',   # plinko tahtası
+            'seesaw',   # tahterevalli
+            'spiral',   # spiral engel
+            'wave_slider', # dalga kaydırıcı
+            'windmill'  # yel değirmeni
         ]
 
-        for _ in range(5):  # 5 sets of obstacles
+        for _ in range(5):  # 1 set of obstacles
             random.seed(datetime.now().timestamp())
             random.shuffle(OBSTACLES)
 
@@ -51,28 +59,78 @@ class LevelRandom(BaseLevel):
                 obstacle = None
                 if obstacle_name == 'plinko':
                     obstacle = Plinko(self.space, 0, y, 20, 9, color='plinko')
+                    self.obstacles.append(obstacle)
+                    y += obstacle.get_height()
                 elif obstacle_name == 'lucky_cup':
                     obstacle = LuckyCup(self.space, 0, y)
+                    self.obstacles.append(obstacle)
+                    y += obstacle.get_height()
                 elif obstacle_name == 'minefield':
                     obstacle = Minefield(self.space, 0, y)
+                    self.obstacles.append(obstacle) 
+                    y += obstacle.get_height()
                 elif obstacle_name == 'seesaw':
                     obstacle = Seesaw(self.space, 0, y, w=400, h=20, angle=0, color='seesaw')
+                    self.obstacles.append(obstacle)
+                    y += obstacle.get_height()
                 elif obstacle_name == 'bouncer':
                     obstacle = Bouncer(self.space, 70, y, radius=50, color='bouncer')
+                    self.obstacles.append(obstacle)
+                    y += obstacle.get_height()
                 elif obstacle_name == 'funnel':
                     obstacle = Funnel(self.space, y)
+                    self.obstacles.append(obstacle)
+                    y += obstacle.get_height()
                 elif obstacle_name == 'conveyor':
-                    obstacle = Conveyor(self.space, 150, y)
+                    y += 100
+                    obstacles = [Conveyor(self.space, 150, y, direction=1), Conveyor(self.space, 450, y + 150, direction=-1), Conveyor(self.space, 150, y + 300, direction=1), Conveyor(self.space, 450, y + 450, direction=-1),]
+                    for obs in obstacles:
+                        self.obstacles.append(obs)
+                    y += 800
                 elif obstacle_name == 'windmill':
-                    obstacle = Windmill(self.space, 200, y)
+                    obstacles = [Windmill(self.space, SCREEN_WIDTH//2- 100, y), Windmill(self.space, SCREEN_WIDTH//2 + 100, y+200, rotation_speed=-3)] ; y += 500
+                    for obs in obstacles:
+                        self.obstacles.append(obs)
                 elif obstacle_name == 'hammer':
                     obstacle = Hammer(self.space, 300, y)
-                
-                if obstacle:
                     self.obstacles.append(obstacle)
-                    y += obstacle.get_height() + 100  # Ek spacing ile iç içe geçmeyi önle
+                    y += obstacle.get_height()
+                elif obstacle_name == 'gravity_well':
+                    obstacles = [GravityWell(self.space, SCREEN_WIDTH//2-100, y), GravityWell(self.space, SCREEN_WIDTH//2+100, y)]
+                    for obs in obstacles:
+                        self.obstacles.append(obs)
+                    y += 500
+                elif obstacle_name == 'spiral':
+                    obstacles = [Spiral(self.space, SCREEN_WIDTH//2 -150, y), Spiral(self.space, SCREEN_WIDTH//2 + 150, y), Spiral(self.space, SCREEN_WIDTH//2, y)]; y += 900
+                    for obs in obstacles:
+                        self.obstacles.append(obs)
+                elif obstacle_name == 'wave_slider':
+                    obstacle = WaveSlider(self.space, SCREEN_WIDTH//2, y)
+                    self.obstacles.append(obstacle)
+                    y += obstacle.get_height()
+                elif obstacle_name == 'force_zone':
+                    # Harita boyunca rastgele dağıt - 8-12 tane, çakışma kontrolü ile
+                    num_zones = random.randint(8, 12)
+                    for i in range(num_zones):
+                        attempts = 0
+                        while attempts < 25:
+                            zx = random.randint(100, SCREEN_WIDTH - 100)
+                            zy = random.randint(500, WORLD_HEIGHT - 500)  # Tüm harita boyunca
 
+                            # Basit çakışma kontrolü: mevcut engellerin pozisyonlarına çok yakın olmasın
+                            ok = True
+                            for obs in self.obstacles:
+                                if hasattr(obs, 'body') and obs.body is not None:
+                                    ox, oy = obs.body.position
+                                    if abs(ox - zx) < 120 and abs(oy - zy) < 120:
+                                        ok = False
+                                        break
+                            if ok:
+                                break
+                            attempts += 1
 
-
+                        zone = ForceZone(self.space, zx, zy, radius=80, force_strength=1800)
+                        self.obstacles.append(zone)
+                    y += 100  # Minimal artış
 
         self.wall_obstacles()

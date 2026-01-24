@@ -37,9 +37,6 @@ class Bouncer(BaseObstacle):
                 bouncer_x = x + i * spacing
                 bouncer_y = y + j * spacing
                 
-                if bouncer_x < 0 or bouncer_x > 2000 or bouncer_y > MAX_OBSTACLE_HEIGHT:
-                    continue
-                
                 # Static body
                 body = pymunk.Body(body_type=pymunk.Body.STATIC)
                 body.position = bouncer_x, bouncer_y
@@ -61,4 +58,4 @@ class Bouncer(BaseObstacle):
         self.spacing = spacing
     
     def get_height(self):
-        return self.y_count * self.spacing + 150
+        return 400

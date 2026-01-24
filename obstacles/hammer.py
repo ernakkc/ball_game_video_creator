@@ -23,8 +23,6 @@ class Hammer(BaseObstacle):
         self.arm_length = arm_length
         self.hammer_size = hammer_size
         
-        if y > MAX_OBSTACLE_HEIGHT:
-            return
         
         # Pivot noktası (tavanda sabit)
         pivot_body = pymunk.Body(body_type=pymunk.Body.STATIC)
@@ -82,4 +80,4 @@ class Hammer(BaseObstacle):
         self.shapes = [arm, hammer_head]
     
     def get_height(self):
-        return self.arm_length + self.hammer_size * 2 + 100
+        return 400
