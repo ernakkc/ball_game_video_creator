@@ -221,9 +221,9 @@ class Game:
                             sound = pygame.mixer.Sound(sound_file)
                             sound.set_volume(0.5)
                             self.leader_sound_channel.play(sound, loops=-1)  # Sonsuz döngü (-1)
-                            self.log(f"🔊 Ses döngüde çalıyor: {new_leader_name}")
+                            self.log(f"Ses dongude caliyor: {new_leader_name}")
                         except Exception as e:
-                            self.log(f"Ses çalma hatası: {e}", level='warn')
+                            self.log(f"Ses calma hatasi: {e}", level='warn')
                         self.leader = current_leader
                     
                     # Gravity well etkilerini uygula
@@ -256,7 +256,7 @@ class Game:
                                         fy = -abs(math.cos(angle) * power)  # Yukarıya doğru
                                         body.apply_impulse_at_local_point((fx, fy), (0, 0))
                                         ball.stuck_count = 0
-                                        self.log(f"Uyari: {ball.name} sikisti, SIDDETLİ kurtarma! (fx={fx:.0f}, fy={fy:.0f})")
+                                        self.log(f"Uyari: {ball.name} sikisti, SIDDETLI kurtarma! (fx={fx:.0f}, fy={fy:.0f})")
                                     
                                     # 4 saniye hala sıkışıksa (kritik)
                                     if ball.stuck_count > FPS * 4:
@@ -271,7 +271,7 @@ class Game:
                                             )
                                             body.velocity = (0, 0)
                                             ball.stuck_count = 0
-                                            self.log(f"🚀 {ball.name} teleport edildi!")
+                                            self.log(f"{ball.name} teleport edildi!")
                                 else:
                                     # Hareket ediyorsa sayacı sıfırla
                                     ball.stuck_count = 0
@@ -372,7 +372,7 @@ class Game:
                             ball.body.position = (new_x, new_y)
                             ball.body.velocity = (0, 400)
                             ball.catching_up = True
-                            self.log(f"⏩ {ball.name} yakalama modunda! (y={int(new_y)})")
+                            self.log(f"{ball.name} yakalama modunda! (y={int(new_y)})")
                     except Exception:
                         pass
 
