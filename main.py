@@ -61,14 +61,14 @@ if __name__ == '__main__':
         game.load_level(LevelRandom)
         results = game.run()
 
-        print("Oyun Sonuçları:")
+        print("Game Results:")
         for key, value in results.items():
             print(f"{key}: {value}")
 
         frame_count = results['frame_count']
         comments = results.get('comments', [])
 
-        print(f"\n{results['frame_count']} frame kaydedildi. Video oluşturuluyor...")  # Bilgi mesajı
+        print(f"\n{results['frame_count']} frames recorded. Creating video...")  # Info message
 
         # ==================== VİDEO OLUŞTURMA (MOVIEPY) ====================
         # Tüm kaydedilen PNG dosyalarından video oluştur
@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
         # ==================== SESLERİ VİDEOYA EKLE ====================
         if comments:  # Eğer ses kayıtları varsa
-            print(f"\n{len(comments)} ses kaydi kontrol ediliyor...")
+            print(f"\n{len(comments)} sound records checking...")
             audio_clips = []  # Tüm ses kliplerini tutacak liste
 
             for idx, item in enumerate(comments):  # Her ses kaydı için
@@ -123,19 +123,19 @@ if __name__ == '__main__':
 
                         print(f"  + {os.path.basename(sound_file)} @ {start_time:.1f}s → {start_time + max_duration:.1f}s (looped)")
                     except Exception as e:
-                        print(f"  Uyari: {os.path.basename(sound_file)} eklenemedi: {e}")
+                        print(f"  Warning: {os.path.basename(sound_file)} could not be added: {e}")
 
             # Eğer ses klipleri varsa videoya ekle
             if audio_clips:
                 final_audio = CompositeAudioClip(audio_clips)  # Tüm sesleri birleştir
                 clip = clip.set_audio(final_audio)  # Videoya sesi ekle
-                print(f"\n{len(audio_clips)} ses efekti videoya eklendi!")
+                print(f"\n{len(audio_clips)} sound effects added to video!")
             else:
-                print("\nHicbir ses eklenemedi")
+                print("\nNo sound added")
         else:
-            print("\nKaydedilmis ses yok")
+            print("\nNo recorded sound")
 
-        print("\nVideo dosyasi olusturuluyor...")
+        print("\nCreating video file...")
         clip.write_videofile(f"{OUTPUT_FOLDER}/advanced_marble_race-{datetime.now().timestamp()}.mp4", codec="libx264", fps=FPS, audio=True, audio_codec='aac', preset='ultrafast', threads=8, verbose=False)  # Çok hızlı ayarlar
 
-        print(f"Video hazir: {OUTPUT_FOLDER}/advanced_marble_race.mp4")  # Başarı mesajı
+        print(f"Video ready: {OUTPUT_FOLDER}/advanced_marble_race.mp4")  # Başarı mesajı
