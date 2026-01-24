@@ -239,7 +239,7 @@ class Game:
                             if math.isnan(body.position.x) or math.isnan(body.position.y):
                                 body.position = (SCREEN_WIDTH / 2, 600)
                                 body.velocity = (0, 0)
-                                self.log(f"🔧 {ball.name} pozisyonu sıfırlandı (NaN)")
+                                self.log(f"{ball.name} pozisyonu sifirlandi (NaN)")
                                 continue
                             
                             # Son Y pozisyonu kaydedildiyse
@@ -256,7 +256,7 @@ class Game:
                                         fy = -abs(math.cos(angle) * power)  # Yukarıya doğru
                                         body.apply_impulse_at_local_point((fx, fy), (0, 0))
                                         ball.stuck_count = 0
-                                        self.log(f"⚠️ {ball.name} sıkıştı, ŞİDDETLİ kurtarma! (fx={fx:.0f}, fy={fy:.0f})")
+                                        self.log(f"Uyari: {ball.name} sikisti, SIDDETLİ kurtarma! (fx={fx:.0f}, fy={fy:.0f})")
                                     
                                     # 4 saniye hala sıkışıksa (kritik)
                                     if ball.stuck_count > FPS * 4:
@@ -382,7 +382,7 @@ class Game:
                         screen_y_b = ball.body.position.y - self.camera.y
                         if screen_y_b > -50:
                             ball.catching_up = False
-                            self.log(f"✅ {ball.name} ekrana girdi, hızlandırma bitti.")
+                            self.log(f"{ball.name} ekrana girdi, hizlandirma bitti.")
                         else:
                             dt = max(1.0 / FPS, self.clock.get_time() / 1000.0)
                             vx, vy = ball.body.velocity

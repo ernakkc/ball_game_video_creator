@@ -8,12 +8,12 @@ def setup_venv():
     venv_path = ".venv"
 
     if not os.path.exists(venv_path):
-        print("🔧 Sanal ortam bulunamadı, oluşturuluyor...")
+        print("Sanal ortam bulunamadi, olusturuluyor...")
         try:
             subprocess.run([sys.executable, "-m", "venv", venv_path], check=True)
-            print("✅ Sanal ortam oluşturuldu")
+            print("Sanal ortam olusturuldu")
         except subprocess.CalledProcessError as e:
-            print(f"❌ Sanal ortam oluşturulamadı: {e}")
+            print(f"Sanal ortam olusturulamadi: {e}")
             sys.exit(1)
 
     # Sanal ortamı aktive et
@@ -26,18 +26,18 @@ def setup_venv():
 
     # Eğer sanal ortamda değilsek, sanal ortamda yeniden başlat
     if not sys.executable.endswith(python_exe):
-        print("🔄 Sanal ortam aktive ediliyor...")
+        print("Sanal ortam aktive ediliyor...")
         os.execv(python_exe, [python_exe] + sys.argv)
 
     # Gereksinimleri yükle
     requirements_file = "requirements.txt"
     if os.path.exists(requirements_file):
-        print("📦 Kütüphaneler kontrol ediliyor...")
+        print("Kutuphaneler kontrol ediliyor...")
         try:
             subprocess.run([pip_exe, "install", "-r", requirements_file], check=True)
-            print("✅ Kütüphaneler yüklendi")
+            print("Kutuphaneler yuklendi")
         except subprocess.CalledProcessError as e:
-            print(f"❌ Kütüphaneler yüklenemedi: {e}")
+            print(f"Kutuphaneler yuklenemedi: {e}")
             sys.exit(1)
 
 # Sanal ortamı ayarla
@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
         # ==================== SESLERİ VİDEOYA EKLE ====================
         if comments:  # Eğer ses kayıtları varsa
-            print(f"\n🎵 {len(comments)} ses kaydı kontrol ediliyor...")
+            print(f"\n{len(comments)} ses kaydi kontrol ediliyor...")
             audio_clips = []  # Tüm ses kliplerini tutacak liste
 
             for idx, item in enumerate(comments):  # Her ses kaydı için
@@ -121,21 +121,21 @@ if __name__ == '__main__':
                                 loop_clip = loop_clip.volumex(0.5)
                                 audio_clips.append(loop_clip)
 
-                        print(f"  ✓ {os.path.basename(sound_file)} @ {start_time:.1f}s → {start_time + max_duration:.1f}s (looped)")
+                        print(f"  + {os.path.basename(sound_file)} @ {start_time:.1f}s → {start_time + max_duration:.1f}s (looped)")
                     except Exception as e:
-                        print(f"  ⚠️ {os.path.basename(sound_file)} eklenemedi: {e}")
+                        print(f"  Uyari: {os.path.basename(sound_file)} eklenemedi: {e}")
 
             # Eğer ses klipleri varsa videoya ekle
             if audio_clips:
                 final_audio = CompositeAudioClip(audio_clips)  # Tüm sesleri birleştir
                 clip = clip.set_audio(final_audio)  # Videoya sesi ekle
-                print(f"\n✅ {len(audio_clips)} ses efekti videoya eklendi!")
+                print(f"\n{len(audio_clips)} ses efekti videoya eklendi!")
             else:
-                print("\n⚠️ Hiçbir ses eklenemedi")
+                print("\nHicbir ses eklenemedi")
         else:
-            print("\n⚠️ Kaydedilmiş ses yok")
+            print("\nKaydedilmis ses yok")
 
-        print("\n🎥 Video dosyası oluşturuluyor...")
+        print("\nVideo dosyasi olusturuluyor...")
         clip.write_videofile(f"{OUTPUT_FOLDER}/advanced_marble_race-{datetime.now().timestamp()}.mp4", codec="libx264", fps=FPS, audio=True, audio_codec='aac', preset='ultrafast', threads=8, verbose=False)  # Çok hızlı ayarlar
 
-        print(f"✅ Video hazır: {OUTPUT_FOLDER}/advanced_marble_race.mp4")  # Başarı mesajı
+        print(f"Video hazir: {OUTPUT_FOLDER}/advanced_marble_race.mp4")  # Başarı mesajı

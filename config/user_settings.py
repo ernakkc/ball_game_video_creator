@@ -7,10 +7,10 @@ MIN_MARBLES = 2
 NUM_MARBLES = 4
 
 NAMES = [
-    "France",
-    "Germany",
-    "ABD",
-    "Turkey",
+    "a",
+    "v",
+    "s",
+    "s",
 ]
 COLORS = [
     (255,255,255),
@@ -19,10 +19,10 @@ COLORS = [
     (255,255,255),
 ]
 PHOTOS = [
-    r"/Users/erenakkoc/Desktop/ball_game_video_creator/assets/photos/france.png",
-    r"/Users/erenakkoc/Desktop/ball_game_video_creator/assets/photos/germany.png",
-    r"/Users/erenakkoc/Desktop/ball_game_video_creator/assets/photos/ABD.png",
-    r"/Users/erenakkoc/Desktop/ball_game_video_creator/assets/photos/turkey.png",
+    r"",
+    r"",
+    r"",
+    r"",
 ]
 SOUNDS = [
     r"/Users/erenakkoc/Desktop/ball_game_video_creator/assets/sounds/suriye-milli-marsi.mp3",
