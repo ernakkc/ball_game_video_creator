@@ -33,7 +33,7 @@ class LevelRandom(BaseLevel):
         self.obstacles.append(Platform(self.space, SCREEN_WIDTH//2, WORLD_HEIGHT - 30, SCREEN_WIDTH, 60, color='wall'))
 
     def build(self):
-        y = 400 # Starting Y position
+        y = 400
 
         OBSTACLES = [
             'bouncer', # düz top sektirici

@@ -292,18 +292,40 @@ class Game:
                 winner_ball = max(self.balls, key=lambda b: b.body.position[1])  # Şampiyon top objesi
                 print(f"ŞAMPİYON: {winner_ball.name}")  # Şampiyon ismini yazdır
                 print(f"SÜRE: {self.elapsed_time:.2f}s")  # Bitiş süresini yazdır
-                
-                # ==================== KUTLAMA EKRANI (3 SANİYE) ====================
-                for extra in range(FPS * 3):  # 3 saniye = 180 kare
-                    self.screen.fill((15, 15, 30))  # Ekranı temizle
-                    # Şampiyon yazısı (çok büyük)
-                    winner_text = pygame.font.SysFont("arial", 48, bold=True).render(f"ŞAMPİYON: {winner_ball.name}", True, winner_ball.color)
-                    self.screen.blit(winner_text, (SCREEN_WIDTH / 2 - winner_text.get_width() / 2, SCREEN_HEIGHT / 2))  # Ekranın ortasına yaz
-                    pygame.display.flip()  # Ekranı güncelle
-                    # Kareyi kaydet (video modunda)
+
+                # === 3 saniye bekle (oyun devam etsin, şampiyon ekranı gelmesin) ===
+                wait_frames = int(FPS * 3)
+                wait_frames_result = int(FPS * 5)  # 5 saniye bekleme sonucu için
+                for _ in range(wait_frames):
+                    dt = self.clock.tick(FPS) / 1000.0
+                    # Fizik ve toplar güncellensin
+                    self.world.space.step(1.0 / FPS)
+                    for ball in self.balls:
+                        if hasattr(ball, 'update'):
+                            ball.update(dt)
+                    # Engelleri güncelle (varsa)
+                    if hasattr(self.world, 'update_obstacles_visibility'):
+                        leader_y = max(ball.body.position.y for ball in self.balls)
+                        self.camera.update(leader_y)
+                        self.world.update_obstacles_visibility(self.camera.y)
+                    # Ekranı çiz
+                    self.screen.fill((15, 15, 30))
+                    self.renderer.draw(self.world.space)
+                    self.renderer.draw_balls(self.balls)
+                    pygame.display.flip()
                     if self.record_video:
                         pygame.image.save(self.screen, f"output_frames/frame_{self.frame_count:05d}.png")
-                        self.frame_count += 1  # Kare sayısını artır
+                        self.frame_count += 1
+
+                # === 3 saniye şampiyon ekranı ===
+                for _ in range(wait_frames_result):
+                    self.clock.tick(FPS)
+                    self.screen.fill((15, 15, 30))
+                    self.renderer.draw_victory_screen(winner_ball)
+                    pygame.display.flip()
+                    if self.record_video:
+                        pygame.image.save(self.screen, f"output_frames/frame_{self.frame_count:05d}.png")
+                        self.frame_count += 1
                 self.running = False  # Oyunu bitir
             
             leader_y = max(ball.body.position.y for ball in self.balls)
