@@ -139,16 +139,16 @@ class Renderer:
         ray_rect = ray_surf.get_rect(center=(center_x, center_y))
         self.screen.blit(ray_surf, ray_rect)
 
-        # 4. "ŞAMPİYON!" Başlığı
+        # 4. "CHAMPION!" Başlığı
         # Hafif yukarı aşağı salınım
         float_y = math.sin(self.animation_timer * 2) * 10
         
         # Gölge
-        shadow_text = self.winner_font_large.render("ŞAMPİYON!", True, (0, 0, 0))
+        shadow_text = self.winner_font_large.render("CHAMPION!", True, (0, 0, 0))
         self.screen.blit(shadow_text, (center_x - shadow_text.get_width()//2 + 4, center_y - 180 + float_y + 4))
         
         # Asıl Yazı (Altın rengi)
-        title_text = self.winner_font_large.render("ŞAMPİYON!", True, (255, 215, 0))
+        title_text = self.winner_font_large.render("CHAMPION!", True, (255, 215, 0))
         self.screen.blit(title_text, (center_x - title_text.get_width()//2, center_y - 180 + float_y))
 
         # 5. Kazananın Avatarı/Topu
@@ -182,7 +182,7 @@ class Renderer:
         pygame.draw.circle(self.screen, (255, 215, 0), ball_pos, ball_radius, 6)
 
         # 6. Kazananın İsmi (Kutulu)
-        name_text = winner_ball.name if hasattr(winner_ball, 'name') else "Yarışçı"
+        name_text = winner_ball.name if hasattr(winner_ball, 'name') else "Competitor"
         name_surf = self.winner_font_small.render(name_text, True, (255, 255, 255))
         
         name_bg_rect = name_surf.get_rect(center=(center_x, center_y + 140))

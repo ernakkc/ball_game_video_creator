@@ -128,7 +128,9 @@ if __name__ == '__main__':
 
                         print(f"  + {os.path.basename(sound_file)} @ {start_time:.1f}s → {start_time + max_duration:.1f}s (looped)")
                     except Exception as e:
-                        print(f"  Warning: {os.path.basename(sound_file)} could not be added: {e}")
+                        safe_filename = os.path.basename(sound_file).encode('cp1252', errors='replace').decode('cp1252')
+                        safe_error = str(e).encode('cp1252', errors='replace').decode('cp1252')
+                        print(f"  Warning: {safe_filename} could not be added: {safe_error}")
 
             # Eğer ses klipleri varsa videoya ekle
             if audio_clips:
