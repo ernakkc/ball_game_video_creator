@@ -42,7 +42,7 @@ class ForceZone(BaseObstacle):
 
         # Fill rengini neredeyse tamamen şeffaf yap
         rgba = to_rgba_float(push_color)
-        rgba = (rgba[0], rgba[1], rgba[2], 0.1)  # Alpha ~1%
+        rgba = (rgba[0], rgba[1], rgba[2], 0.45)  # Alpha %45 ile daha görünür
 
         self.body = pymunk.Body(body_type=pymunk.Body.STATIC)
         self.body.position = x, y
@@ -53,6 +53,8 @@ class ForceZone(BaseObstacle):
         self.shape.sensor = True  # Çarpışma olmadan algıla
         self.shape.color = rgba
         self.shape.edge_color = to_rgba_float(push_color)
+        if hasattr(self.shape, 'edge_thickness'):
+            self.shape.edge_thickness = 5  # Kenar kalınlığı (varsa destekliyorsa)
         self.shape.push_direction = self.direction
         self.shape.push_color = push_color
         self.shape.collision_type = 2  # Farklı collision type

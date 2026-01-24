@@ -7,10 +7,10 @@ MIN_MARBLES = 2
 NUM_MARBLES = 4
 
 NAMES = [
-    "Ahmet",
-    "Mehmet",
-    "Osman",
-    "Hüseyin",
+    "France",
+    "Germany",
+    "ABD",
+    "Turkey",
 ]
 COLORS = [
     (255,255,255),

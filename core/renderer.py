@@ -255,14 +255,16 @@ class Renderer:
                 center = shape.body.local_to_world(shape.offset)
                 pos = vec2px(self, center)
                 pcol = getattr(shape, 'push_color', (200, 200, 200))
-                surf_size = int(shape.radius * 2 + 8)
+                surf_size = int(shape.radius * 2 + 12)
                 temp_surf = pygame.Surface((surf_size, surf_size), pygame.SRCALPHA)
                 c = (surf_size // 2, surf_size // 2)
                 
-                # ForceZone Görseli (Saydam daire + ok)
-                pygame.draw.circle(temp_surf, (pcol[0], pcol[1], pcol[2], 8), c, int(shape.radius))
+                # ForceZone Görseli (Daha belirgin saydam daire + ok)
+                circle_alpha = 110  # Daha görünür alpha
+                pygame.draw.circle(temp_surf, (pcol[0], pcol[1], pcol[2], circle_alpha), c, int(shape.radius))
+                pygame.draw.circle(temp_surf, (pcol[0], pcol[1], pcol[2], 200), c, int(shape.radius), 5)  # Kalın kenar
                 arrow_length = shape.radius * 0.7
-                arrow_alpha = 40
+                arrow_alpha = 200  # Ok daha belirgin
                 
                 start, end, head = (0,0), (0,0), []
                 direction = getattr(shape, 'push_direction', 'up')

@@ -17,9 +17,9 @@ from entities.ball import Ball
 from entities.screen_text import ScreenText
 
 class Game:
-        def log(self, msg, level='info'):
-            tag = {'info': '[INFO]', 'warn': '[WARN]', 'err': '[ERR]', 'ok': '[OK]'}.get(level, '[INFO]')
-            print(f"{tag} {msg}")
+    def log(self, msg, level='info'):
+        tag = {'info': '[INFO]', 'warn': '[WARN]', 'err': '[ERR]', 'ok': '[OK]'}.get(level, '[INFO]')
+        print(f"{tag} {msg}")
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
