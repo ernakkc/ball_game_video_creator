@@ -2,7 +2,7 @@ import pygame
 import pymunk
 import pymunk.pygame_util
 from random import randint, uniform
-from config.settings import DEFAULT_OBSTACLE_COLOR, TRAIL_LENGTH, SCREEN_HEIGHT, SCREEN_WIDTH
+from config.settings import DEFAULT_OBSTACLE_COLOR, TRAIL_LENGTH, SCREEN_HEIGHT, SCREEN_WIDTH, WORLD_HEIGHT
 from utils.vec2px import vec2px
 
 
@@ -22,7 +22,12 @@ class Renderer:
         self.screen = screen
         self.draw_options = pymunk.pygame_util.DrawOptions(screen)
         self.camera = camera
+        self.color1 = color1
+        self.color2 = color2
         self.gradient_surf = create_gradient_surface(SCREEN_WIDTH, SCREEN_HEIGHT, color1, color2)
+        
+        # Duvar gradyanları için önbellek
+        self.vertical_wall_grad = create_gradient_surface(20, WORLD_HEIGHT, color1, color2)
         
         # Yıldızları başlat
         self.stars = []
@@ -60,11 +65,20 @@ class Renderer:
                     vec2px(self, shape.body.local_to_world(v))
                     for v in shape.get_vertices()
                 ]
-                pygame.draw.polygon(self.screen, color, verts)
                 
-                # Kenar çizgisi
+                # Duvar kontrolü
+                x_coords = [v[0] for v in verts]
+                y_coords = [v[1] for v in verts]
+                width = max(x_coords) - min(x_coords)
+                height = max(y_coords) - min(y_coords)
+                is_wall = (width < 50 or height < 50) and getattr(shape, "edge_color", None) is None
+                
+                if not is_wall:
+                    pygame.draw.polygon(self.screen, color, verts)
+                
+                # Kenar çizgisi - duvarlar için hiç çizme
                 edge_color = getattr(shape, "edge_color", None)
-                if edge_color:
+                if edge_color and not is_wall:
                     if isinstance(edge_color, (tuple, list)) and len(edge_color) >= 3:
                         if max(edge_color) <= 1.0:
                             edge_color_rgb = (
@@ -77,6 +91,22 @@ class Renderer:
                     else:
                         edge_color_rgb = DEFAULT_OBSTACLE_COLOR
                     pygame.draw.lines(self.screen, edge_color_rgb, True, verts, 3)
+                
+                # Duvarlar için sadece gradyan çiz (dikey olanlar için)
+                if is_wall:
+                    if width < height:  # Dikey duvar
+                        # Önbellekten al
+                        wall_surf = self.vertical_wall_grad.subsurface((0, 0, int(width), int(height)))
+                        pos = (min(x_coords), min(y_coords))
+                        self.screen.blit(wall_surf, pos)
+                        
+                        # Hafif iç kenar çizgisi
+                        inner_x = max(x_coords) if min(x_coords) < SCREEN_WIDTH // 2 else min(x_coords)
+                        pygame.draw.line(self.screen, (200, 200, 200), (inner_x, min(y_coords)), (inner_x, max(y_coords)), 1)
+                    # Yatay duvarlar için gradyan yok, sadece hafif kenar
+                    elif height < width:  # Yatay duvar
+                        inner_y = max(y_coords) if min(y_coords) < WORLD_HEIGHT // 2 else min(y_coords)
+                        pygame.draw.line(self.screen, (200, 200, 200), (min(x_coords), inner_y), (max(x_coords), inner_y), 1)
 
             elif isinstance(shape, pymunk.Circle):
                 center = shape.body.local_to_world(shape.offset)

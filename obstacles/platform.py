@@ -18,7 +18,10 @@ class Platform(BaseObstacle):
         elif isinstance(color, str): resolved = OBSTACLE_COLORS.get(color, OBSTACLE_COLORS.get('platform'))
         else: resolved = color
         self.shape.color = to_rgba_float(resolved)
-        self.shape.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('platform', resolved))
+        if color == 'wall':
+            self.shape.edge_color = None  # Duvarlarda kenar çizgisi olmasın
+        else:
+            self.shape.edge_color = to_rgba_float(OBSTACLE_COLORS_EDGE.get('platform', resolved))
         
         space.add(self.body, self.shape)
         

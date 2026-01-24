@@ -336,25 +336,42 @@ class Game:
             
             # Ekran yazılarını çiz
             fps = self.clock.get_fps()
-            self.screen_text.draw_game_info(self.screen, self.balls, fps, self.elapsed_time)
+            # Bölge belirleme
+            if self.balls:
+                leader = max(self.balls, key=lambda b: b.body.position.y)
+                leader_y = leader.body.position.y
+                if leader_y < 2000:
+                    zone_name = "Başlangıç"
+                elif leader_y < 5000:
+                    zone_name = "İlk Bölge"
+                elif leader_y < 8000:
+                    zone_name = "İkinci Bölge"
+                elif leader_y < 12000:
+                    zone_name = "Üçüncü Bölge"
+                elif leader_y < 16000:
+                    zone_name = "Dördüncü Bölge"
+                else:
+                    zone_name = "Final"
+            else:
+                zone_name = "Bölge Yok"
+            self.screen_text.draw_game_info(self.screen, self.balls, fps, self.elapsed_time, zone_name)
             self.screen_text.draw_ball_stats(self.screen, self.balls, self.camera.y)
-            self.screen_text.draw_instructions(self.screen)
             
             # Gate countdown göster
             if self.gate_timer > 0:
                 countdown_text = f"{int(self.gate_timer) + 1}"
-                countdown_surf = self.screen_text.font_large.render(countdown_text, True, (255, 50, 50))
+                # Büyük font kullan ve animasyon ekle
+                base_size = 150
+                scale = 1 + 0.3 * math.sin(self.elapsed_time * 8)  # Nabız animasyonu
+                font_size = int(base_size * scale)
+                big_font = pygame.font.Font(None, font_size)
+                countdown_surf = big_font.render(countdown_text, True, (255, 150, 50))  # Daha güzel turuncu-kırmızı
                 countdown_rect = countdown_surf.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
                 # Gölge
-                shadow_surf = self.screen_text.font_large.render(countdown_text, True, (0, 0, 0))
-                shadow_rect = shadow_surf.get_rect(center=(SCREEN_WIDTH // 2 + 4, SCREEN_HEIGHT // 2 + 4))
+                shadow_surf = big_font.render(countdown_text, True, (100, 20, 0))  # Daha koyu gölge
+                shadow_rect = shadow_surf.get_rect(center=(SCREEN_WIDTH // 2 + int(6 * scale), SCREEN_HEIGHT // 2 + int(6 * scale)))
                 self.screen.blit(shadow_surf, shadow_rect)
                 self.screen.blit(countdown_surf, countdown_rect)
-            
-            # Level adını göster (ilk 3 saniye)
-            if self.level and hasattr(self.level, '__class__'):
-                level_name = self.level.__class__.__name__
-                self.screen_text.draw_level_name(self.screen, level_name, 3.0, self.level_start_time)
             
             # Pause overlay
             if self.paused:
@@ -374,11 +391,11 @@ class Game:
                     name_text = ball.name
                     
                     # Renk: Lider altın, diğerleri beyaz
-                    text_color = self.screen_text.color_yellow if rank == 0 else self.screen_text.color_white
+                    text_color = self.screen_text.color_rank1_gold if rank == 0 else self.screen_text.color_white
                     
                     # Gölge ile çiz
                     text_surf = font.render(name_text, True, text_color)
-                    shadow_surf = font.render(name_text, True, self.screen_text.color_black)
+                    shadow_surf = font.render(name_text, True, (0, 0, 0))
                     
                     # Topun üstünde konumlandır
                     text_x = int(x - text_surf.get_width() // 2)
