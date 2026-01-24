@@ -43,8 +43,8 @@ class ScreenText:
         # Ana ekrana yapıştır
         surface.blit(panel_surface, rect.topleft)
 
-    def draw_game_info(self, surface, balls, fps, elapsed_time, current_zone_name="BÖLGE YOK"):
-        """Üç paneli yan yana çizer: LİDER, BÖLGE, SÜRE."""
+    def draw_game_info(self, surface, balls, fps, elapsed_time, current_zone_name="NO ZONE"):
+        """Üç paneli yan yana çizer: LEADER, ZONE, TIME."""
         leader = max(balls, key=lambda b: b.body.position.y) if balls else None
         
         # Panel Düzeni - Daha küçük
@@ -58,12 +58,12 @@ class ScreenText:
         lider_rect = pygame.Rect(margin_x, margin_y, panel_w, panel_h)
         self.draw_rounded_panel(surface, lider_rect, self.color_panel_bg, corner_radius=10)
         
-        # Başlık: "LİDER"
-        title_surf = self.font_small.render("LİDER", True, self.color_gray_text)
+        # Başlık: "LEADER"
+        title_surf = self.font_small.render("LEADER", True, self.color_gray_text)
         title_rect = title_surf.get_rect(centerx=lider_rect.centerx, top=lider_rect.top + 3)
         surface.blit(title_surf, title_rect)
         
-        # İsim: "Yarışçı X"
+        # İsim: "Contestant X"
         leader_name = getattr(leader, 'name', '-') if leader else '-'
         name_color = self.color_leader_pink if leader else self.color_white
         name_surf = self.font_medium.render(leader_name, True, name_color)
@@ -74,8 +74,8 @@ class ScreenText:
         bolge_rect = pygame.Rect(lider_rect.right + gap, margin_y, panel_w, panel_h)
         self.draw_rounded_panel(surface, bolge_rect, self.color_panel_bg, corner_radius=10)
         
-        # Başlık: "BÖLGE"
-        title_surf = self.font_small.render("BÖLGE", True, self.color_gray_text)
+        # Başlık: "ZONE"
+        title_surf = self.font_small.render("ZONE", True, self.color_gray_text)
         title_rect = title_surf.get_rect(centerx=bolge_rect.centerx, top=bolge_rect.top + 3)
         surface.blit(title_surf, title_rect)
         
@@ -88,8 +88,8 @@ class ScreenText:
         sure_rect = pygame.Rect(bolge_rect.right + gap, margin_y, panel_w, panel_h)
         self.draw_rounded_panel(surface, sure_rect, self.color_panel_bg, corner_radius=8)
         
-        # Başlık: "SÜRE"
-        title_surf = self.font_small.render("SÜRE", True, self.color_gray_text)
+        # Başlık: "TIME"
+        title_surf = self.font_small.render("TIME", True, self.color_gray_text)
         title_rect = title_surf.get_rect(centerx=sure_rect.centerx, top=sure_rect.top + 3)
         surface.blit(title_surf, title_rect)
         
@@ -102,7 +102,7 @@ class ScreenText:
         surface.blit(time_surf, time_rect)
 
     def draw_ball_stats(self, surface, balls, camera_y):
-        """Sağ taraftaki 'ANLIK SIRALAMA' panelini çizer (Görsele birebir uygun)."""
+        """Sağ taraftaki 'LIVE RANKING' panelini çizer (Görsele birebir uygun)."""
         if not balls:
             return
         
@@ -122,8 +122,8 @@ class ScreenText:
         main_rect = pygame.Rect(panel_x, panel_y, panel_w, panel_h)
         self.draw_rounded_panel(surface, main_rect, self.color_panel_bg, corner_radius=20)
         
-        # 2. Başlık: "ANLIK SIRALAMA"
-        title_surf = self.font_bold.render("ANLIK SIRALAMA", True, self.color_cyan_title)
+        # 2. Başlık: "LIVE RANKING"
+        title_surf = self.font_bold.render("LIVE RANKING", True, self.color_cyan_title)
         surface.blit(title_surf, (panel_x + 15, panel_y + 12))
         
         # 3. Sıralama Satırları
@@ -131,7 +131,7 @@ class ScreenText:
         
         for i, ball in enumerate(sorted_balls[:num_racers]):
             rank = i + 1
-            name = getattr(ball, 'name', f'Yarışçı {rank}')
+            name = getattr(ball, 'name', f'Contestant {rank}')
             # İlerleme yüzdesi
             progress = min(100, (ball.body.position.y / WORLD_HEIGHT) * 100)
             
@@ -178,12 +178,12 @@ class ScreenText:
     # --- Diğer Metodlar (Stile uygun sadeleştirildi) ---
 
     def draw_pause_overlay(self, surface):
-        """Duraklatma ekranı"""
+        """Pause screen overlay"""
         darken = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
         darken.fill((0, 0, 0, 180)) # Biraz daha koyu bir karartma
         surface.blit(darken, (0, 0))
         
-        surf = self.font_large.render("OYUN DURAKLATILDI", True, self.color_white)
+        surf = self.font_large.render("GAME PAUSED", True, self.color_white)
         rect = surf.get_rect(center=(SCREEN_WIDTH//2, SCREEN_HEIGHT//2))
         surface.blit(surf, rect)
 

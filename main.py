@@ -1,5 +1,47 @@
 import sys
 import os
+import subprocess
+
+# ==================== SANAL ORTAM KONTROLÜ ====================
+def setup_venv():
+    """Sanal ortamı kontrol eder ve gerekirse oluşturur"""
+    venv_path = ".venv"
+
+    if not os.path.exists(venv_path):
+        print("🔧 Sanal ortam bulunamadı, oluşturuluyor...")
+        try:
+            subprocess.run([sys.executable, "-m", "venv", venv_path], check=True)
+            print("✅ Sanal ortam oluşturuldu")
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Sanal ortam oluşturulamadı: {e}")
+            sys.exit(1)
+
+    # Sanal ortamı aktive et
+    if os.name == 'nt':  # Windows
+        python_exe = os.path.join(venv_path, "Scripts", "python.exe")
+        pip_exe = os.path.join(venv_path, "Scripts", "pip.exe")
+    else:  # macOS/Linux
+        python_exe = os.path.join(venv_path, "bin", "python")
+        pip_exe = os.path.join(venv_path, "bin", "pip")
+
+    # Eğer sanal ortamda değilsek, sanal ortamda yeniden başlat
+    if not sys.executable.endswith(python_exe):
+        print("🔄 Sanal ortam aktive ediliyor...")
+        os.execv(python_exe, [python_exe] + sys.argv)
+
+    # Gereksinimleri yükle
+    requirements_file = "requirements.txt"
+    if os.path.exists(requirements_file):
+        print("📦 Kütüphaneler kontrol ediliyor...")
+        try:
+            subprocess.run([pip_exe, "install", "-r", requirements_file], check=True)
+            print("✅ Kütüphaneler yüklendi")
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Kütüphaneler yüklenemedi: {e}")
+            sys.exit(1)
+
+# Sanal ortamı ayarla
+setup_venv()
 
 if __name__ == '__main__':
     if '--ui' in sys.argv:

@@ -291,11 +291,11 @@ class Game:
             finish_y = WORLD_HEIGHT - 100  # Finiş çizgisi
             marble_bodies = [ball.body for ball in self.balls]
             if any(body.position[1] >= finish_y for body in marble_bodies):  # Herhangi bir top finişe ulaştıysa
-                self.log(f"\n🏁 YARIŞ BİTTİ! 🏁")
+                self.log(f"\n🏁 GAME FINISHED! 🏁")
                 winner_body = max(marble_bodies, key=lambda b: b.position[1])  # En uzakta olan topu bul (şampiyon)
                 winner_ball = max(self.balls, key=lambda b: b.body.position[1])  # Şampiyon top objesi
-                self.log(f"ŞAMPİYON: {winner_ball.name}")
-                self.log(f"SÜRE: {self.elapsed_time:.2f}s")
+                self.log(f"CHAMPION: {winner_ball.name}")
+                self.log(f"TIME: {self.elapsed_time:.2f}s")
 
                 # === 3 saniye bekle (oyun devam etsin, şampiyon ekranı gelmesin) ===
                 wait_frames = int(FPS * 3)

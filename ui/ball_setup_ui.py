@@ -18,13 +18,13 @@ class BallConfig:
 class BallSetupUI(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title('Top Ayarları ve Video Üretimi')
+        self.title('Ball Settings and Video Production')
         self.geometry('900x600')
         self.resizable(False, False)
         self.configure(bg='#232946')
         self.ball_count = tk.IntVar(value=4)
         self.ball_configs = []
-        self.status_var = tk.StringVar(value='Hazır')
+        self.status_var = tk.StringVar(value='Ready')
         self.create_widgets()
         self.update_ball_list()
 
@@ -37,8 +37,8 @@ class BallSetupUI(tk.Tk):
         self.log_text.tag_config('ok', foreground='#50fa7b')
 
     def create_widgets(self):
-        # Top sayısı seçimi
-        tk.Label(self, text='Top Sayısı:', font=('Arial', 14, 'bold'), bg='#232946', fg='#eebbc3').place(x=30, y=30)
+        # Ball count selection
+        tk.Label(self, text='Ball Count:', font=('Arial', 14, 'bold'), bg='#232946', fg='#eebbc3').place(x=30, y=30)
         tk.Spinbox(self, from_=2, to=12, textvariable=self.ball_count, width=5, font=('Arial', 14), command=self.update_ball_list).place(x=150, y=30)
         
         # Ball list frame
@@ -46,7 +46,7 @@ class BallSetupUI(tk.Tk):
         self.ball_frame.place(x=30, y=80, width=840, height=400)
         
         # Başlat butonu
-        self.start_btn = tk.Button(self, text='Video Üretimini Başlat', font=('Arial', 16, 'bold'), bg='#eebbc3', fg='#232946', command=self.on_start)
+        self.start_btn = tk.Button(self, text='Start Video Production', font=('Arial', 16, 'bold'), bg='#eebbc3', fg='#232946', command=self.on_start)
         self.start_btn.place(x=320, y=500, width=260, height=50)
         
         # Durum etiketi
@@ -68,23 +68,23 @@ class BallSetupUI(tk.Tk):
         y = idx * 60
         bc = self.ball_configs[idx]
         # İsim
-        tk.Label(self.ball_frame, text=f'Top {idx+1}', font=('Arial', 12, 'bold'), bg='#232946', fg='#eebbc3').place(x=0, y=y+10)
+        tk.Label(self.ball_frame, text=f'Ball {idx+1}', font=('Arial', 12, 'bold'), bg='#232946', fg='#eebbc3').place(x=0, y=y+10)
         name_entry = tk.Entry(self.ball_frame, font=('Arial', 12), width=12)
         name_entry.place(x=80, y=y+10)
         name_entry.insert(0, bc.name)
         name_entry.bind('<KeyRelease>', lambda e, i=idx: self.set_name(i, e.widget.get()))
         # Fotoğraf
-        photo_btn = tk.Button(self.ball_frame, text='Fotoğraf Seç', command=lambda i=idx: self.choose_photo(i), bg='#eebbc3', fg='#232946')
+        photo_btn = tk.Button(self.ball_frame, text='Choose Photo', command=lambda i=idx: self.choose_photo(i), bg='#eebbc3', fg='#232946')
         photo_btn.place(x=220, y=y+8, width=110)
-        photo_label = tk.Label(self.ball_frame, text=os.path.basename(bc.photo) if bc.photo else 'Yok', bg='#232946', fg='#eebbc3', font=('Arial', 10))
+        photo_label = tk.Label(self.ball_frame, text=os.path.basename(bc.photo) if bc.photo else 'None', bg='#232946', fg='#eebbc3', font=('Arial', 10))
         photo_label.place(x=340, y=y+12)
         # Renk
-        color_btn = tk.Button(self.ball_frame, text='Renk Seç', command=lambda i=idx: self.choose_color(i), bg=bc.color, fg='#232946')
+        color_btn = tk.Button(self.ball_frame, text='Choose Color', command=lambda i=idx: self.choose_color(i), bg=bc.color, fg='#232946')
         color_btn.place(x=440, y=y+8, width=90)
         # Ses
-        sound_btn = tk.Button(self.ball_frame, text='Ses Seç', command=lambda i=idx: self.choose_sound(i), bg='#eebbc3', fg='#232946')
+        sound_btn = tk.Button(self.ball_frame, text='Choose Sound', command=lambda i=idx: self.choose_sound(i), bg='#eebbc3', fg='#232946')
         sound_btn.place(x=540, y=y+8, width=110)
-        sound_label = tk.Label(self.ball_frame, text=os.path.basename(bc.sound) if bc.sound else 'Yok', bg='#232946', fg='#eebbc3', font=('Arial', 10))
+        sound_label = tk.Label(self.ball_frame, text=os.path.basename(bc.sound) if bc.sound else 'None', bg='#232946', fg='#eebbc3', font=('Arial', 10))
         sound_label.place(x=660, y=y+12)
         # Önizleme
         preview = tk.Canvas(self.ball_frame, width=30, height=30, bg='#232946', highlightthickness=0)
@@ -105,19 +105,19 @@ class BallSetupUI(tk.Tk):
         self.ball_configs[idx].name = name
 
     def choose_photo(self, idx):
-        file = filedialog.askopenfilename(initialdir=PHOTOS_DIR, title='Fotoğraf Seç', filetypes=[('Resim Dosyaları', '*.png *.jpg *.jpeg')])
+        file = filedialog.askopenfilename(initialdir=PHOTOS_DIR, title='Choose Photo', filetypes=[('Image Files', '*.png *.jpg *.jpeg')])
         if file:
             self.ball_configs[idx].photo = file
             self.update_ball_list()
 
     def choose_color(self, idx):
-        color = colorchooser.askcolor(title='Renk Seç')[1]
+        color = colorchooser.askcolor(title='Choose Color')[1]
         if color:
             self.ball_configs[idx].color = color
             self.update_ball_list()
 
     def choose_sound(self, idx):
-        file = filedialog.askopenfilename(initialdir=SOUNDS_DIR, title='Ses Seç', filetypes=[('Ses Dosyaları', '*.wav *.mp3')])
+        file = filedialog.askopenfilename(initialdir=SOUNDS_DIR, title='Choose Sound', filetypes=[('Sound Files', '*.wav *.mp3')])
         if file:
             self.ball_configs[idx].sound = file
             self.update_ball_list()
@@ -126,13 +126,13 @@ class BallSetupUI(tk.Tk):
         # Girişleri kontrol et
         for i, bc in enumerate(self.ball_configs):
             if not bc.name:
-                messagebox.showerror('Eksik Bilgi', f'Top {i+1} için isim giriniz!')
+                messagebox.showerror('Missing Information', f'Please enter a name for Ball {i+1}!')
                 return
             if not bc.photo and not bc.color:
-                messagebox.showerror('Eksik Bilgi', f'Top {i+1} için fotoğraf veya renk seçiniz!')
+                messagebox.showerror('Missing Information', f'Please choose a photo or color for Ball {i+1}!')
                 return
             if not bc.sound:
-                messagebox.showerror('Eksik Bilgi', f'Top {i+1} için ses seçiniz!')
+                messagebox.showerror('Missing Information', f'Please choose a sound for Ball {i+1}!')
                 return
         self.status_var.set('Video oluşturuluyor...')
         self.start_btn.config(state='disabled')
@@ -143,7 +143,7 @@ class BallSetupUI(tk.Tk):
             import sys
             import subprocess
             self.save_user_settings()
-            self.status_var.set('Video oluşturuluyor...')
+            self.status_var.set('Creating video...')
             try:
                 self.start_btn.config(state='disabled')
             except:
@@ -168,14 +168,14 @@ class BallSetupUI(tk.Tk):
 
             proc.wait()
             if proc.returncode == 0:
-                self.append_log('Video oluşturuldu!', tag='ok')
-                self.status_var.set('Video oluşturuldu!')
+                self.append_log('Video created!', tag='ok')
+                self.status_var.set('Video created!')
             else:
-                self.append_log(f'Hata: süreç kodu {proc.returncode}', tag='err')
-                self.status_var.set(f'Hata: süreç kodu {proc.returncode}')
+                self.append_log(f'Error: process code {proc.returncode}', tag='err')
+                self.status_var.set(f'Error: process code {proc.returncode}')
         except Exception as e:
-            self.append_log(f'Hata: {e}', tag='err')
-            self.status_var.set(f'Hata: {e}')
+            self.append_log(f'Error: {e}', tag='err')
+            self.status_var.set(f'Error: {e}')
         finally:
             try:
                 self.start_btn.config(state='normal')

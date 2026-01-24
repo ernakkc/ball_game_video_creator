@@ -1,0 +1,23 @@
+# Ball Game Video Creator
+
+## .gitattributes for GitHub linguist and line endings
+
+* text=auto
+*.py linguist-language=Python
+*.md linguist-language=Markdown
+*.bat linguist-language=Batchfile
+*.sh linguist-language=Shell
+*.yml linguist-language=YAML
+*.json linguist-language=JSON
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.wav binary
+*.mp3 binary
+*.ogg binary
+
+# Recommended for cross-platform line endings
+*.py eol=lf
+*.md eol=lf
+*.bat eol=crlf
