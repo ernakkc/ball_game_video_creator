@@ -25,9 +25,39 @@ def setup_venv():
         pip_exe = os.path.join(venv_path, "bin", "pip")
 
     # Eğer sanal ortamda değilsek, sanal ortamda yeniden başlat
-    if not sys.executable.endswith(python_exe):
-        print("Sanal ortam aktive ediliyor...")
-        os.execv(python_exe, [python_exe] + sys.argv)
+    def find_venv_python(venv_dir):
+        """Venv içindeki python yürütülebilirini bulmaya çalışır (cross-platform)."""
+        candidates = []
+        if os.name == 'nt':
+            candidates = [os.path.join(venv_dir, 'Scripts', 'python.exe'),
+                          os.path.join(venv_dir, 'Scripts', 'python3.exe')]
+        else:
+            candidates = [os.path.join(venv_dir, 'bin', 'python'),
+                          os.path.join(venv_dir, 'bin', 'python3')]
+
+        # Fallback: tarama yap
+        for root, dirs, files in os.walk(venv_dir):
+            for name in files:
+                if name.lower().startswith('python'):
+                    candidates.append(os.path.join(root, name))
+
+        for p in candidates:
+            if os.path.exists(p) and os.access(p, os.X_OK):
+                return os.path.abspath(p)
+        return None
+
+    venv_python = find_venv_python(venv_path)
+
+    if venv_python is None:
+        print(f"Sanal ortam python bulunamadi: {venv_path}. Beklenen yol: {python_exe}")
+    else:
+        # Karşılaştırmayı gerçek yollar üzerinde yap
+        try:
+            if os.path.abspath(sys.executable) != os.path.abspath(venv_python):
+                print("Sanal ortam aktive ediliyor...")
+                os.execv(venv_python, [venv_python] + sys.argv)
+        except Exception as e:
+            print(f"Sanal ortam aktive edilemedi: {e}")
 
     # Gereksinimleri yükle
     requirements_file = "requirements.txt"
