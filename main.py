@@ -2,76 +2,28 @@ import sys
 import os
 import subprocess
 
-# ==================== SANAL ORTAM KONTROLÜ ====================
-def setup_venv():
-    """Sanal ortamı kontrol eder ve gerekirse oluşturur"""
-    venv_path = ".venv"
+try:
+    import pygame
+except ImportError:
+    print("Pygame not found. Installing...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "pygame==2.6.1"])
+    import pygame
+try:    import pymunk
+except ImportError:
+    print("Pymunk not found. Installing...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "pymunk==7.2.0"])
+    import pymunk
+try:    import moviepy
+except ImportError:
+    print("MoviePy not found. Installing...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "moviepy==1.0.3"])
+    import moviepy
+try:    from PIL import Image
+except ImportError:
+    print("Pillow not found. Installing...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "Pillow==10.4.0"])
+    from PIL import Image   
 
-    if not os.path.exists(venv_path):
-        print("Sanal ortam bulunamadi, olusturuluyor...")
-        try:
-            subprocess.run([sys.executable, "-m", "venv", venv_path], check=True)
-            print("Sanal ortam olusturuldu")
-        except subprocess.CalledProcessError as e:
-            print(f"Sanal ortam olusturulamadi: {e}")
-            sys.exit(1)
-
-    # Sanal ortamı aktive et
-    if os.name == 'nt':  # Windows
-        python_exe = os.path.join(venv_path, "Scripts", "python.exe")
-        pip_exe = os.path.join(venv_path, "Scripts", "pip.exe")
-    else:  # macOS/Linux
-        python_exe = os.path.join(venv_path, "bin", "python")
-        pip_exe = os.path.join(venv_path, "bin", "pip")
-
-    # Eğer sanal ortamda değilsek, sanal ortamda yeniden başlat
-    def find_venv_python(venv_dir):
-        """Venv içindeki python yürütülebilirini bulmaya çalışır (cross-platform)."""
-        candidates = []
-        if os.name == 'nt':
-            candidates = [os.path.join(venv_dir, 'Scripts', 'python.exe'),
-                          os.path.join(venv_dir, 'Scripts', 'python3.exe')]
-        else:
-            candidates = [os.path.join(venv_dir, 'bin', 'python'),
-                          os.path.join(venv_dir, 'bin', 'python3')]
-
-        # Fallback: tarama yap
-        for root, dirs, files in os.walk(venv_dir):
-            for name in files:
-                if name.lower().startswith('python'):
-                    candidates.append(os.path.join(root, name))
-
-        for p in candidates:
-            if os.path.exists(p) and os.access(p, os.X_OK):
-                return os.path.abspath(p)
-        return None
-
-    venv_python = find_venv_python(venv_path)
-
-    if venv_python is None:
-        print(f"Sanal ortam python bulunamadi: {venv_path}. Beklenen yol: {python_exe}")
-    else:
-        # Karşılaştırmayı gerçek yollar üzerinde yap
-        try:
-            if os.path.abspath(sys.executable) != os.path.abspath(venv_python):
-                print("Sanal ortam aktive ediliyor...")
-                os.execv(venv_python, [venv_python] + sys.argv)
-        except Exception as e:
-            print(f"Sanal ortam aktive edilemedi: {e}")
-
-    # Gereksinimleri yükle
-    requirements_file = "requirements.txt"
-    if os.path.exists(requirements_file):
-        print("Kutuphaneler kontrol ediliyor...")
-        try:
-            subprocess.run([pip_exe, "install", "-r", requirements_file], check=True)
-            print("Kutuphaneler yuklendi")
-        except subprocess.CalledProcessError as e:
-            print(f"Kutuphaneler yuklenemedi: {e}")
-            sys.exit(1)
-
-# Sanal ortamı ayarla
-setup_venv()
 
 if __name__ == '__main__':
     if '--ui' in sys.argv:
