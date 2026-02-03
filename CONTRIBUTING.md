@@ -7,7 +7,6 @@
 5. Please follow PEP8 and keep code/documentation clear.
 
 For major changes, open an issue to discuss what you want to change.
-
 ---
 
 # Nasıl katkı sağlanır
