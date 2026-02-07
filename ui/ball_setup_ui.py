@@ -28,10 +28,13 @@ class BallSetupUI(tk.Tk):
         self.status_var = tk.StringVar(value='Ready')
         self.create_widgets()
         self.update_ball_list()
+        
+        # Ball count değişikliklerini izle (widget'lar oluşturulduktan sonra)
+        self.ball_count.trace_add('write', lambda *args: self.update_ball_list())
 
         # Terminal benzeri çıktı paneli
         self.log_text = tk.Text(self, height=10, width=110, bg='#181c2f', fg='#eebbc3', font=('Consolas', 11), state='disabled')
-        self.log_text.place(x=30, y=370, width=840, height=120)
+        self.log_text.place(x=30, y=360, width=840, height=130)
         self.log_text.tag_config('info', foreground='#eebbc3')
         self.log_text.tag_config('warn', foreground='#ffb86c')
         self.log_text.tag_config('err', foreground='#ff5555')
@@ -40,15 +43,40 @@ class BallSetupUI(tk.Tk):
     def create_widgets(self):
         # Ball count selection
         tk.Label(self, text='Ball Count:', font=('Arial', 14, 'bold'), bg='#232946', fg='#eebbc3').place(x=30, y=30)
-        tk.Spinbox(self, from_=2, to=12, textvariable=self.ball_count, width=5, font=('Arial', 14), command=self.update_ball_list).place(x=150, y=30)
+        tk.Spinbox(self, from_=2, to=12, textvariable=self.ball_count, width=5, font=('Arial', 14)).place(x=150, y=30)
         
         # Video count selection
         tk.Label(self, text='Video Count:', font=('Arial', 14, 'bold'), bg='#232946', fg='#eebbc3').place(x=250, y=30)
         tk.Spinbox(self, from_=1, to=10, textvariable=self.video_count, width=5, font=('Arial', 14)).place(x=370, y=30)
         
-        # Ball list frame
-        self.ball_frame = tk.Frame(self, bg='#232946')
-        self.ball_frame.place(x=30, y=80, width=840, height=400)
+        # Ball list frame with scrollbar
+        # Canvas ve scrollbar için konteyner
+        self.scroll_container = tk.Frame(self, bg='#232946')
+        self.scroll_container.place(x=30, y=80, width=840, height=270)
+        
+        # Canvas oluştur
+        self.canvas = tk.Canvas(self.scroll_container, bg='#232946', highlightthickness=0)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        # Scrollbar oluştur
+        self.scrollbar = tk.Scrollbar(self.scroll_container, orient=tk.VERTICAL, command=self.canvas.yview)
+        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # Canvas'ı scrollbar'a bağla
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        
+        # Canvas içine frame yerleştir
+        self.ball_frame = tk.Frame(self.canvas, bg='#232946')
+        self.canvas_window = self.canvas.create_window((0, 0), window=self.ball_frame, anchor='nw')
+        
+        # Frame boyutu değiştiğinde canvas scroll bölgesini güncelle
+        self.ball_frame.bind('<Configure>', lambda e: self.canvas.configure(scrollregion=self.canvas.bbox('all')))
+        
+        # Canvas genişliği değiştiğinde frame genişliğini ayarla
+        self.canvas.bind('<Configure>', lambda e: self.canvas.itemconfig(self.canvas_window, width=e.width))
+        
+        # Mouse wheel ile scroll
+        self.canvas.bind_all('<MouseWheel>', self._on_mousewheel)
         
         # Başlat butonu
         self.start_btn = tk.Button(self, text='Start Video Production', font=('Arial', 16, 'bold'), bg='#eebbc3', fg='#232946', command=self.on_start)
@@ -57,6 +85,10 @@ class BallSetupUI(tk.Tk):
         # Durum etiketi
         self.status_label = tk.Label(self, textvariable=self.status_var, font=('Arial', 13), bg='#232946', fg='#eebbc3')
         self.status_label.place(x=30, y=560)
+    
+    def _on_mousewheel(self, event):
+        """Mouse wheel ile scroll"""
+        self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
     def update_ball_list(self):
         for widget in self.ball_frame.winfo_children():
@@ -68,6 +100,12 @@ class BallSetupUI(tk.Tk):
             self.ball_configs.pop()
         for i in range(count):
             self.create_ball_row(i)
+        # Frame yüksekliğini ayarla (her satır 60 piksel)
+        total_height = count * 60
+        self.ball_frame.config(height=total_height)
+        # Canvas scroll bölgesini güncelle
+        self.canvas.update_idletasks()
+        self.canvas.config(scrollregion=self.canvas.bbox('all'))
 
     def create_ball_row(self, idx):
         y = idx * 60

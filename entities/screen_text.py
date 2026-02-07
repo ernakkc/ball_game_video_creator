@@ -110,7 +110,7 @@ class ScreenText:
         
         # Ana Panel Boyut ve Konumu
         panel_w = 200
-        num_racers = 4
+        num_racers = len(sorted_balls)  # Tüm topları göster
         row_h = 28
         row_margin = 6
         panel_h = 45 + (row_h + row_margin) * num_racers
@@ -129,7 +129,7 @@ class ScreenText:
         # 3. Sıralama Satırları
         start_y = panel_y + 42
         
-        for i, ball in enumerate(sorted_balls[:num_racers]):
+        for i, ball in enumerate(sorted_balls):
             rank = i + 1
             name = getattr(ball, 'name', f'Contestant {rank}')
             # İlerleme yüzdesi
@@ -145,8 +145,11 @@ class ScreenText:
             elif rank == 3:
                 text_color = self.color_rank3_purple
                 bg_color = self.color_row_bg
-            else: # rank 4 ve sonrası
+            elif rank == 4:
                 text_color = self.color_rank4_red
+                bg_color = self.color_row_bg
+            else: # rank 5 ve sonrası - beyaz
+                text_color = self.color_white
                 bg_color = self.color_row_bg
             
             # Satır Arka Planı
